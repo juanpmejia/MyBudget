@@ -1,0 +1,43 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<script type="text/javascript">
+function set_openid(openid, pr)
+{
+    u = openid.search('<username>')
+    if (u != -1) {
+        // openid requires username
+        user = prompt('Digita tu ' + pr + ' usuario:')
+        openid = openid.substr(0, u) + user
+    }
+    form = document.forms['login'];
+    form.elements['openid'].value = openid
+}
+</script>
+
+<div class="col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h1 class="panel-title">Iniciar Sesión</h1>
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" name="login">
+                {{ form.hidden_tag() }}
+                <p>
+                    Por favor ingresa tu openID o selecciona uno de los proveedores:<br>
+                    {{ form.openid(size=80) }}
+                    {% for error in form.openid.errors %}
+                      <span style="color: red;">[{{error}}]</span>
+                    {% endfor %}<br>
+                    |{% for pr in providers %}
+                      <a href="javascript:set_openid('{{ pr.url }}', '{{ pr.name }}');">{{ pr.name }}</a> |
+                    {% endfor %}
+                </p>
+                <p>{{ form.remember_me }} Recordar</p>
+                <p><input type="submit" value="Entrar"></p>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
