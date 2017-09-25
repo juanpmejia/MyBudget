@@ -8,7 +8,11 @@ def index():
     return render_template('index.html',
                            title='Home',
                            user=user)
-    
+                          
+@app.route('/registro')
+def registro():
+    return render_template('registro.html',
+                            title='registro')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,3 +25,5 @@ def login():
                            title='Iniciar Sesion',
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
+                           
+                         

@@ -11,33 +11,22 @@
    height: 100%;
    width: auto;
    margin: 0 auto;
-   
-   /* probably not needed anymore, but doesn't hurt */
-   -o-object-fit: contain;
-   object-fit: contain; 
 }
 
-#par1{
+.banner{
     font-family: sans-serif;
     color: #fff;
     text-shadow: #474747 1px 1px 2px;
     text-align:center;
     background-color: #f7941e ;
-    padding-top:30px;
-    padding-bottom:50px;
+    padding-top:1px;
+
 }
 
 #copy{
     color:#fff;
 }
 
-#desc{
-    font-size:20px;
-}
-
-.main {
-    margin-bottom: 100px; /* Add a bottom margin to avoid content overlay */
-}
 
 #foto{
     max-width: 100%;
@@ -45,9 +34,23 @@
     width:auto;
     display: block;
     margin: 0 auto;
-    padding-bottom:20px;
+    padding-bottom:10px;
 }
 
 body{
-    padding-bottom: 80px;
+    padding-bottom: 30px;
+}
+
+.carousel-inner > .item > img {
+    height:450px;
+}
+
+h1 {
+  font-size: 4.0vw;
+}
+h2 {
+  font-size: 3.0vh;
+}
+p {
+  font-size: 2vmin;
 }
