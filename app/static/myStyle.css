@@ -46,10 +46,11 @@ body{
 }
 
 h1 {
-  font-size: 4.0vw;
+   
+  font-size: 4.5vh;
 }
 h2 {
-  font-size: 3.0vh;
+    font-size: 3.0vh;
 }
 p {
   font-size: 2vmin;
