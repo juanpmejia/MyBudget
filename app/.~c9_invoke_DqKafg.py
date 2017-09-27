@@ -1,6 +1,5 @@
 from flask import render_template, flash, redirect
 from app import app
-from .database import Database
 from .forms import LoginForm
 @app.route('/')
 @app.route('/index')
@@ -25,7 +24,6 @@ def login():
     return render_template('login.html', 
                            title='Iniciar Sesión',
                            form=form,
-                           db = Database(),
                            providers=app.config['OPENID_PROVIDERS'])
                            
                          
