@@ -2,6 +2,7 @@
   <head>
     <title>{{ title }}</title>
     <!-- Latest compiled and minified CSS -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/myStyle.css">
@@ -33,10 +34,10 @@
           </div>
   
       </nav>
-      
-      
+    
+    <div class = "column" id = "content">
     {% block content %}{% endblock %}
-      
+    </div>
       <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
         <div class="containerr">
           <div class="navbar-text pull-left">

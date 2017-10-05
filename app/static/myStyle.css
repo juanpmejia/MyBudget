@@ -37,13 +37,16 @@
     padding-bottom:10px;
 }
 
-body{
-    padding-bottom: 30px;
+html{
+    /*Fixed padding for all the site*/
+    padding-bottom: 60px;
 }
 
-.carousel-inner > .item > img {
-    height:450px;
+#submit{
+    /*Extra padding for the register form*/
+    margin-bottom: 10px;
 }
+
 
 h1 {
    
@@ -55,3 +58,6 @@ h2 {
 p {
   font-size: 2vmin;
 }
+
+
+

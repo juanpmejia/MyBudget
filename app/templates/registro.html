@@ -4,27 +4,56 @@
 
 <div class="container">
     <div class="row">
-        <form role="form">
+        <form role="form" method = "post">
             <div class="col-lg-6 col-md-offset-3">
                 <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campo obligatorio</strong></div>
                 <div class="form-group">
                     <label for="InputName">Ingrese nombre</label>
                     <div class="input-group">
-                        <input type="text" required  oninvalid="this.setCustomValidity('Por favor llene este campo')" class="form-control" name="InputName" id="InputName" placeholder="Ingrese nombre" required>
+                        <input type="text"  class="form-control" name="InputName" id="InputName" placeholder="Ingrese nombre" required oninvalid="this.setCustomValidity('Por favor llene este campo')"
+                        oninput="setCustomValidity('')">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="InputDate">Ingrese fecha de nacimiento </label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="InputDateFirst" name="InputDate" placeholder="Ingrese Fecha de nacimiento" required oninvalid="this.setCustomValidity('Por favor llene este campo')"
+                        oninput="setCustomValidity('')">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Inputgenero">Género</label>
+                    <div class="radio">
+                        <label class=btn><input type="radio" name="optradio" id="M" value="M">Masculino</label>
+                    </div>
+                    <div class="radio">
+                        <label class=btn btn-info active><input checked type="radio" name="optradio" id="F" value="F">Femenino</label>
+                    </div> 
+                </div>
+                
+                <div class="form-group">
+                    <label for="InputPassword">Ingrese clave</label>
+                    <div class="input-group">
+                        <input type="password"  class="form-control" id="InputPassword" name="InputPassword" placeholder="Ingrese clave" maxlength="16" required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
+                        oninput="setCustomValidity('')">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="InputConPassword">Confirme clave</label>
+                    <div class="input-group">
+                        <input type="password"  class="form-control" id="InputConPassword" name="InputConPassword" placeholder="Confirme clave" maxlength="16" required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea la misma clave')"
+                        oninput="setCustomValidity('')">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="InputEmail">Ingrese correo</label>
                     <div class="input-group">
-                        <input type="email" required  oninvalid="this.setCustomValidity('Por favor llene este campo')" class="form-control" id="InputEmailFirst" name="InputEmail" placeholder="Ingrese correo" required>
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="InputEmail">Confirme correo</label>
-                    <div class="input-group">
-                        <input type="email" required  oninvalid="this.setCustomValidity('Por favor llene este campo')" class="form-control" id="InputEmailSecond" name="InputEmail" placeholder="Confirme correo" required>
+                        <input type="email"  class="form-control" id="InputEmailFirst" name="InputEmail" placeholder="Ingrese correo" required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea un correo valido')"
+                        oninput="setCustomValidity('')">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
                 </div>
@@ -33,5 +62,9 @@
         </form>
     </div>
 </div>
+
+<script type="text/javascript" src="/static/confirmPassScript.js"></script>
+
+
 
 {% endblock %}

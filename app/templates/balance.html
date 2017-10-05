@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer",
+	{
+		title:{
+			text: "Balance Gastos Semanales"
+		},
+		legend: {
+			maxWidth: 350,
+			itemWidth: 120
+		},
+		data: [
+		{
+			type: "bar",
+			showInLegend: true,
+			legendText: "{indexLabel}",
+			dataPoints: [
+				{ y: 4181563, indexLabel: "Comida" },
+				{ y: 2175498, indexLabel: "Transporte" },
+				{ y: 3125844, indexLabel: "Servicios Públicos" },
+				{ y: 1176121, indexLabel: "Otros"}
+			]
+		}
+		]
+	});
+	chart.render();
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+{% endblock %}
