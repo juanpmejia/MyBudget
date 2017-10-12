@@ -1,6 +1,7 @@
 """
 This module makes data validations from client to server and back
 """
+import hashlib
 import datetime
 from .database import Database
 
@@ -33,8 +34,14 @@ def createUser(form):
     
     db = Database()
     
+    
+    m = hashlib.sha256()
+    m.update(form["InputPassword"].encode('utf-8'))
+    
+    password = m.hexdigest()
+    
     userData = {"name": form["InputName"],
-                "password": form["InputPassword"],
+                "password": password,
                 "email" : form["InputEmail"],
                 "gender" : form["optradio"],
                 "budget" : 0,
