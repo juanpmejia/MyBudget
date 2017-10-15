@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <label for="InputPassword">Ingrese clave</label>
                     <div class="input-group">
-                        <input type="password"  class="form-control" id="InputPassword" name="InputPassword" placeholder="Ingrese clave" maxlength="16" required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
+                        <input type="password"  pattern = "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control" id="InputPassword" name="InputPassword" placeholder="Ingrese clave" maxlength="16" required oninvalid="this.setCustomValidity('Por favor llene este campo, asegúrese de que sea una clave válida de mínimo 8 caracteres, entre ellos un número y un caracter especial')"
                         oninput="setCustomValidity('')">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
                     </div>
