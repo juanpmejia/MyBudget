@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="col-lg-6 col-md-offset-2">
+    <div id="Presupuestos compartidos">
+        <h1><b>{{ welcome }}, {{ name }}</b></h1>
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-offset-3">
+    <div id="Presupuestos compartidos">
+        <h2>Presupuestos Colaborativos</h2>
+        <h3>Aqui no hay nada papu e.e forever aloun ja</h3>
+        
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-offset-3">
+    <div id="presupuesto personal">
+        <h2>Presupuesto personal</h2>
+        <label>Seleccione una categoría</label>
+        <select class="form-control" name="cat" id="target">
+            <option value"">Seleccione...</option>
+            <option value="cat1">cat1</option>
+            <option value="cat2">cat2</option>
+            <option value="cat3">cat3</option>
+        </select>
+        <br>
+        <div class="col-lg-6 col-md-offset-1">
+            <div id="cat1" class="inv">Contenido 1
+                <br>
+                <a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=gif" class="img-fluid"></a>
+            </div>
+            <div id="cat2" class="inv">Contenido 2
+                <br>
+                <img src="https://media.giphy.com/media/l378oepoaZ75QN9ew/giphy.gif" class="img-responsive">
+            </div>
+            <div id="cat3" class="inv">Contenido 3
+                <br>
+                <img src="https://media.giphy.com/media/10ZpyYs0OvVlnO/giphy.gif" class="img-responsive">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-offset-3">
+    <br>
+    <a href="/logout" class="btn btn-warning pull-right" id="logout">Cerrar sesión</a>
+</div>
+
+<script type="text/javascript" src="/static/selectCat.js"></script>
+
+
+{% endblock %}

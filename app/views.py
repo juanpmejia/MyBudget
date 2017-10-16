@@ -1,6 +1,6 @@
-from flask import render_template, flash, redirect, request
+import os
+from flask import render_template, redirect, url_for, flash, jsonify, redirect, request, session
 from app import app
-from .database import Database
 from .forms import LoginForm
 
 from .validations import *
@@ -38,6 +38,31 @@ def login():
     return render_template('login.html', 
                            title='Iniciar Sesión'
                            )
+
+@app.route('/try_login', methods=['GET', 'POST'])
+def try_login():
+    print("Login requested")
+    email = request.args.get("email","",type=str)
+    password = request.args.get("password","",type=str)
+    if(registeredEmail(email)):
+        if(validLogin(email,password)):
+            print("Login succesful")
+            user = getUser(email)
+            ans = "ok"
+            session["email"] = email
+            session["name"] = user["name"]
+            session["gender"] = user["gender"]
+            redirect("/lobby")
+            print(email,password)
+        else:
+            print("Invalid password")
+            ans = "Contraseña errada"
+            
+    else:
+        print("Invalid email")
+        ans = "Email invalido"
+    return jsonify(ans=ans)
+    
                            
 
 @app.route('/balance')
@@ -56,3 +81,20 @@ def gasto():
 def crearCategoria():
     return render_template('crearCategoria.html',
                             title='Crear categoría')
+                            
+@app.route('/lobby')
+def lobby():
+    if "name" in session:
+        return render_template('lobbyUsuario.html',
+                                title='Tu lobby',
+                                name = session["name"],
+                                welcome = "Bienvenido" if session["gender"] == "M" else "Bienvenida")
+    else:
+        return "Oie ke te paza, porque nos hackeaps D:<"
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect("/")
+        
+secret_key = os.urandom(24)
+print("Ma'h secrety key is ",secret_key)

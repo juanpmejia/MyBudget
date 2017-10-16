@@ -36,7 +36,7 @@ class Database():
         #Database initialization
         self.usersCollection.create_index("email", unique = True);
         defaultUser = self.defData.copy()
-        print(self.usersCollection.insert_one(defaultUser).inserted_id)
+        #print(self.usersCollection.insert_one(defaultUser).inserted_id)
     
     #CRUD Functions for the user
     

@@ -24,6 +24,26 @@ def validEmail(email):
         print("No hay ningun usuario con ese email")
     
     return False if db.readUserByEmail(email) else True
+
+def registeredEmail(email):
+    """
+    Checks if the given email is available for registration in the database
+    """
+    return not validEmail(email)
+    
+def validLogin(email,password):
+    """
+    Checks if the given email and password are registered in the database
+    """
+    
+    db = Database()
+    user = getUser(email)
+    
+    m = hashlib.sha256()
+    m.update(password.encode('utf-8'))
+    password = m.hexdigest()
+    
+    return True if (user["email"]==email and user["password"]==password) else False 
     
 
 def createUser(form):
@@ -50,4 +70,7 @@ def createUser(form):
     }
     
     db.createUser(**userData)
+
+def getUser(email):
+    return Database().readUserByEmail(email)
     
