@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-lg-6 col-md-offset-3">
+    <div class="panel panel-info">
+        <div class="panel-heading">Estado de creación de categoría</div>
+        <div class="panel-body">
+            <div class="isa_info">
+            <i class="fa fa-check"></i>
+            {{ status }}
+            </div>
+        </div>
+    </div>
+     <a href="{{ link }}" class="btn btn-info pull-right">{{ buttonText }}</a>
+</div>
+{% endblock %}

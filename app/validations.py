@@ -73,4 +73,54 @@ def createUser(form):
 
 def getUser(email):
     return Database().readUserByEmail(email)
+
+
+######----CATEGORY FUNCTIONS----#####
+
+def validCategory(userEmail, name):
+    """
+    Checks if the given category is valid for registration
+    """
+    db = Database()
+    return False if db.readCategory(userEmail, name) else True
+
+def validCategoryForm(form, userEmail):
+    """
+    Checks if the given form is valid for category registration
+    """
+    print("Super formulariop")
+    print(form, "Formulario")
+    return validCategory(userEmail, form["Category"])
+
+def createCategory(form, userEmail):
+    """
+    Creates a category in the database. 
+    NOTE: YOU SHOULD CHECK IF THE CATEGORY ALREADY EXISTS BEFORE CALLING THIS FUNCTION
+    """
+    
+    name = form['Category']
+    description = form['descrip']
+    
+    
+    db = Database()
+    
+    categoryData = {"userEmail": userEmail,
+                    "name": name,
+                    "description": description,
+                    "totalCost": 0
+    }
+    
+    db.createCategory(**categoryData)
+    
+
+def getCategories(userEmail):
+    """
+    Gets a list of categories of the user with the given userEmail
+    """
+    
+    db = Database()
+    return db.readCategoriesByUserEmail(userEmail)
+    
+    
+
     

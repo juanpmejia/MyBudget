@@ -5,6 +5,7 @@ document
         var vis = document.querySelector('.vis'),   
         target = document.getElementById(this.value);
         if (vis !== null) {
+            var d = new Date();
             vis.className = 'inv';
         }
         if (target !== null ) {

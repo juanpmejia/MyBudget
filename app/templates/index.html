@@ -1,57 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
 
+  <link rel="stylesheet" type="text/css" href="/static/carousel_1.css">
+
     <div class="logo">
         <img id=logo src="/static/logo.png" class="img-responsive" alt="logoProd">
     </div>
     <div class="banner">
         <h1>Bienvenidos a MyBudget, el futuro de las finanzas personales</h1>
-        <h2>MyBudget es la plataforma para manejar tus finanzas personales en cualquier lugar y en cualquier momento.</h2>
-        <br> 
+        <h2>MyBudget es la plataforma para manejar tus finanzas personales en cualquier momento.</h2>
+        <br>
     </div>
     
-    
+  <div class="container-fluid" style = "padding: 0px;">
 
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
       <ol class="carousel-indicators">
         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
       </ol>
-     
 
-      <div class="carousel-inner">
+      <!-- Wrapper for slides -->
+      <div class="carousel-inner" >
         <div class="item active">
-          <img src="/static/maneja.jpg" class="img-fluid" alt="...">
+          <img src="/static/maneja.jpg" alt="..." class="fill">
           <div class="carousel-caption">
-            <h3>Ten control sobre tus ingresos y gastos</h3>
+            <h2>Ten control sobre tus ingresos y gastos</h2>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/static/responsive.jpg" alt="..." class="fill">
+          <div class="carousel-caption">
+            <h2>Accede desde cualquier dispositivo</h2>
+          </div>
+        </div>
+        <div class="item">
+          <img src="/static/ahorra.png" alt="..." class="fill">
+          <div class="carousel-caption">
+            <h2>Maneja presupuestos colaborativos</h2>
+          </div>
         </div>
       </div>
-      <div class="item">
-        <img src="/static/responsive.jpg" class="img-fluid" alt="...">
-        <div class="carousel-caption">
-          <h3>Accede desde cualquier dispositivo</h3>
-        </div>
-      </div>
-      <div class="item">
-        <img src="/static/ahorra.png" class="img-fluid" alt="...">
-        <div class="carousel-caption">
-          <h3>Maneja presupuestos colaborativos</h3>
-        </div>
-      </div>
+
+      <!-- Controls -->
+      <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
     </div>
-     
- 
-    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-    </a>
-    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
-  </div> 
 
+  </div>
 
-  <!--<h2>Fake {{ user.nickname }}!</h2>-->
 {% endblock %}
 
 

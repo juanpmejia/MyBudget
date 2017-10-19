@@ -5,6 +5,11 @@ import datetime
 
 
 db = Database(False)
-#db.createUser("Paula", "superpass", "asd@hotmail.com", "08-08-1994", "F")
-print(db.readUserByName("asd@hotmail.com"))
-print(db.readUserById("59d57ba1b36920361b3078c8"))
+#db.createUser("Paula", "superpass", "asd@hotmail.com", "1994-08-08", "F")
+print(db.readUserByEmail("asd@hotmail.com"))
+# db.updateUserByEmail("asd@hotmail.com",name="Alopecia")
+# print(db.readUserByEmail("asd@hotmail.com"))
+# db.deleteUserByEmail("asd@hotmail.com")
+# print(db.readUserByEmail("asd@hotmail.com"))
+#db.createCategory("asd@hotmail.com", "Gasolina")
+print(db.readCategoriesByUserEmail("asd@hotmail.com"))

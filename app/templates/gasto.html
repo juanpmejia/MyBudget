@@ -5,35 +5,41 @@
 <div class="container">
     <div class="row">
         <form role="form">
+            <h1 class="titleSec">Ingreso de gasto</h1>
             <div class="col-lg-6 col-md-offset-3">
-                <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campo obligatorio</strong></div>
-                <div class="form-group">
-                    <label for="expense">Ingrese monto del gasto</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" name="Expense" id="expense" placeholder="Ingrese monto del gasto" required required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
-                        oninput="setCustomValidity('')">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                <div class="panel panel-default">
+                <div class="panel-body">   
+                    <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campo obligatorio</strong></div>
+                    <div class="form-group">
+                        <label for="expense">Ingrese monto del gasto</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="Expense" id="expense" placeholder="Ingrese monto del gasto" required required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
+                            oninput="setCustomValidity('')">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="descrip">Ingrese descripción del gasto</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="descrip" id="descrip" placeholder="Ingrese descripción del gasto" required required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
-                        oninput="setCustomValidity('')">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    <div class="form-group">
+                        <label for="descrip">Ingrese descripción del gasto</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="descrip" id="descrip" placeholder="Ingrese descripción del gasto" required required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea una clave válida')"
+                            oninput="setCustomValidity('')">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                        </div>
                     </div>
+                    
+                    <label for="cat">Escoja categoría</label>
+                    <select class="form-control" name="cat" id="cat">
+                        <option value="">Seleccione...</option>
+                        <option value="cat1">cat1</option>
+                        <option value="cat1">cat2</option>
+                        <option value="cat1">cat3</option>
+                    </select>
+                    
+                    <br>
+    
+                    <input type="submit" name="submit" id="submit" value="Registrar gasto" class="btn btn-danger pull-right">
                 </div>
-                
-                <label for="cat">Escoja categoría</label>
-                <select class="form-control" name="cat" id="cat">
-                    <option value="cat1">cat1</option>
-                    <option value="cat1">cat2</option>
-                    <option value="cat1">cat3</option>
-                </select>
-                
-                <br>
-
-                <input type="submit" name="submit" id="submit" value="Registrar gasto" class="btn btn-info pull-right">
+                </div>
             </div>
         </form>
     </div>

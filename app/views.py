@@ -8,10 +8,12 @@ from .validations import *
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'nickname': 'Paulips'}  # usuario Test fake user
-    return render_template('index.html',
-                           title='Home',
-                           user=user)
+    if "name" in session:
+        return redirect("/lobby")
+    else:
+        return render_template('index.html',
+                           title='Home'
+                           )
                           
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -77,24 +79,45 @@ def gasto():
                             title='Ingreso de gasto')                            
                            
                          
-@app.route('/crearCategoria')
+@app.route('/crearCategoria', methods = ['GET', 'POST'])
 def crearCategoria():
-    return render_template('crearCategoria.html',
-                            title='Crear categoría')
+    if "name" in session:
+        if (request.method == 'POST'):
+            print("Hice un post :D")
+            error = None
+            if (validCategoryForm(request.form,session['email'])):
+                createCategory(request.form, session['email'])
+                status = "Categoria agregada satisfactoriamente"
+                buttonText = "Volver al lobby"
+                link = "/lobby"
+            else:
+                status = "La categoría ya habia sido creada anteriormente. Escoge un nombre nuevo por favor."
+                buttonText = "Volver a Crear Categoría"
+                link = "/crearCategoria"
+            return render_template('categoryCreationResult.html',
+                                title='Crear categoría',
+                                status = status,
+                                buttonText = buttonText,
+                                link = link)
+        else:
+            return render_template('crearCategoria.html',
+                                title='Crear categoría')
                             
 @app.route('/lobby')
 def lobby():
     if "name" in session:
+        categories = getCategories(session['email'])
         return render_template('lobbyUsuario.html',
                                 title='Tu lobby',
+                                categories = categories,
                                 name = session["name"],
                                 welcome = "Bienvenido" if session["gender"] == "M" else "Bienvenida")
     else:
-        return "Oie ke te paza, porque nos hackeaps D:<"
+        return "Oie ke te paza, por que nos hackeaps D:<"
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect("/")
-        
-secret_key = os.urandom(24)
-print("Ma'h secrety key is ",secret_key)
+
+app.secret_key = os.urandom(24)
+print("Ma'h secrety key is ",app.secret_key)
