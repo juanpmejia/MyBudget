@@ -101,7 +101,7 @@ def createCategory(form, userEmail):
     name = form['Category']
     description = form['descrip']
     
-    
+    print("email", userEmail)
     db = Database()
     
     categoryData = {"userEmail": userEmail,

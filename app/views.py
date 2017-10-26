@@ -113,11 +113,11 @@ def lobby():
                                 name = session["name"],
                                 welcome = "Bienvenido" if session["gender"] == "M" else "Bienvenida")
     else:
-        return "Oie ke te paza, por que nos hackeaps D:<"
+        return "<h1> ACCESO DENEGADO! </h1>"
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect("/")
 
 app.secret_key = os.urandom(24)
-print("Ma'h secrety key is ",app.secret_key)
+print("Ma'h secrety key is",app.secret_key)

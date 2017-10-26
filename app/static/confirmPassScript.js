@@ -33,7 +33,7 @@ function validDate(){
   if(dateAge(date.value) >= 15){
     date.setCustomValidity('');
   }else{
-    date.setCustomValidity("e.e feo");
+    date.setCustomValidity("Tiene que ser mayor o igual a 15 años de edad");
   }
 }
 

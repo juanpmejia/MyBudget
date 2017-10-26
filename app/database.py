@@ -36,7 +36,7 @@ class Database():
     def initializeDatabase(self):
         #Database initialization
         self.usersCollection.create_index("email", unique = True);
-        self.categoriesCollection.create_index([("userName", ASCENDING), ("name", DESCENDING)], unique = True)
+        self.categoriesCollection.create_index([("userEmail", ASCENDING), ("name", DESCENDING)], unique = True)
         defaultUser = self.defData.copy()
         #print(self.usersCollection.insert_one(defaultUser).inserted_id)
     
