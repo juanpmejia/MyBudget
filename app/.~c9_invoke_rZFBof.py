@@ -1,15 +1,9 @@
 import os
-import locale
 from flask import render_template, redirect, url_for, flash, jsonify, redirect, request, session
 from app import app
 from .forms import LoginForm
 
 from .validations import *
-
-
-locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-
-
 
 @app.route('/')
 @app.route('/index')
@@ -109,54 +103,35 @@ def crearCategoria():
             return render_template('crearCategoria.html',
                                 title='Crear categoría')
     else:
-        return redirect("/accessdenied")
+        return render_template('accessDenied.html',
+        title='Acceso denegado')
         
                             
 @app.route('/lobby')
 def lobby():
     if "name" in session:
         categories = getCategories(session['email'])
-        for c in categories:
-            c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
-        user = getUser(session['email'])
         return render_template('lobbyUsuario.html',
                                 title='Tu lobby',
                                 categories = categories,
                                 name = session["name"],
-                                budget = locale.currency(user["budget"], grouping = True),
                                 welcome = "Bienvenido" if session["gender"] == "M" else "Bienvenida")
     else:
-        return redirect("/accessdenied")
+        return render_template('accessDenied.html',
+        title='Acceso denegado')
         
         
-@app.route('/deposit', methods = ['GET', 'POST'])
+@app.route('/deposit')
 def deposit():
-    if "name" in session:
-        if(request.method =='GET'):
-            destinations = [{"name" : session["email"]}]
-            return render_template('deposit.html',
-                                    title='Ingresos',
-                                    destinations = destinations,
-                                    name = "Name")#session["name"])
-        elif(request.method =='POST'):
-            if(request.form["destination"] == session["email"]):
-                createIncome(request.form, userEmail=request.form["destination"])
-            else:
-                createIncome(request.form, groupId=request.form["destination"])
-            return redirect("/lobby")
-    else:
-        return redirect("/accessdenied")
-        
+        return render_template('deposit.html',
+                                title='Ingresos',
+                                
+                                name="Name")#session["name"])
 
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect("/")
-    
-@app.route('/accessdenied')
-def accessDenied():
-    return render_template('accessDenied.html',
-        title='Acceso denegado')
 
 app.secret_key = os.urandom(24)
 print("Ma'h secrety key is",app.secret_key)

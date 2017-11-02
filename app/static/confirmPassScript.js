@@ -40,6 +40,7 @@ function validDate(){
 
 
 date.onchange = validDate;
+date.onkeyup = validDate;
 password.onkeyup = validatePassword;
 password.onchange= validatePasswordSame;
 confirmPassword.onkeyup = validatePasswordSame;

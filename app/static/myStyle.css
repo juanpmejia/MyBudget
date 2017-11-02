@@ -107,3 +107,12 @@ padding:12px;
     font-weight: 800; 
     pointer-events: none;
 }
+
+textarea{
+    resize: none;
+    width: 100%;
+}
+
+.btn{
+    margin-right: 10px;
+}

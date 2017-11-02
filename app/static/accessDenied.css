@@ -1,0 +1,44 @@
+.fondo {
+  padding-top: 50;
+  padding-bottom: 25;
+  margin: 70;
+  background: repeating-linear-gradient(45deg, darkred ,  #111111 2px, #111111 3px, #111111 8px);
+  -webkit-user-select: none;         
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+}
+#spam {
+  background-color: lightgray;
+  border-radius: 5px;
+  margin: auto;
+  width: 85%;
+  cursor: not-allowed;
+}
+.warning {
+  padding-top: 30px;
+  font-size: 60px;
+  font-family: Arial;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  border-bottom-style: dashed;
+  padding-bottom: 20px;
+}
+spam {
+   color: red;
+   text-decoration: none;
+   cursor: not-allowed;
+}
+.desc {
+  text-align: center;
+  font-family: Arial;
+  font-weight: bold;
+  padding-bottom: 3%;
+}
+small {
+  font-family: Arial;
+  text-align: center;
+  word-spacing: -1px;
+  font-size: 10px;
+  font-weight: normal;
+  color: gray;
+}

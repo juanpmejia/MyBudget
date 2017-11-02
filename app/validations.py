@@ -121,6 +121,19 @@ def getCategories(userEmail):
     db = Database()
     return db.readCategoriesByUserEmail(userEmail)
     
-    
+######----INCOME FUNCTIONS----#####
 
+def createIncome(form, userEmail=None, groupId=None):
+    """
+    Creates a income for the given userEmail or groupId on the database
+    """
+    db = Database()
+    creationDate = datetime.datetime.now()
+    value = form["value"]
+    description = form["descrip"]
+    
+    if(userEmail):
+        return db.createIncome(creationDate, form["value"], description, userEmail=userEmail)
+    elif(groupId):
+        return db.createIncome(creationDate, form["value"], description, groupId=groupId)
     

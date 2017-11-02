@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form role="form" method="post">
+            <h1 class="titleSec">Ingreso de deposito</h1>
+            <div class="col-lg-6 col-md-offset-3">
+                <div class="panel panel-default">
+                <div class="panel-body">   
+                    <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Campo obligatorio</strong></div>
+                    <div class="form-group">
+                        <label for="expense">Ingrese monto del deposito</label>
+                        <div class="input-group">
+                            <input type="number" step="any" class="form-control" name="value" id="expense" placeholder="Ingrese monto del deposito" required required oninvalid="this.setCustomValidity('Por favor llene este campo, asegurese de que sea un monto válido')"
+                            oninput="setCustomValidity('')">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                        </div>
+                        <br>
+                        <label for="descrip">Ingrese una breve descripción (Opcional)</label>
+                        
+                        <textarea class="form-control" name="descrip" id="descrip" placeholder="Ingrese descripción del deposito"
+                            oninput="setCustomValidity('')"></textarea> 
+                    </div>
+                    <label for="cat">Escoja destino para el deposito</label>
+                    <select class="form-control" name="destination" id="cat">
+                        <option value="">Seleccione...</option>
+                        {% for destination in destinations %}
+                        <option value="{{destination['name']}}">{{destination['name']}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <br>
+    
+                    <input type="submit" name="submit" id="submit" value="Registrar ingreso" class="btn btn-danger pull-right">
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% endblock %}
