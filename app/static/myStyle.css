@@ -104,7 +104,15 @@ padding:12px;
     color: #ff5050; 
     font-family: 'Raleway',sans-serif; 
     font-size: 20px; 
-    font-weight: 800; 
+    font-weight: normal; 
+    pointer-events: none;
+}
+
+.catStyle2{
+    color: #000000; 
+    font-family: 'Raleway',sans-serif; 
+    font-size: 15px; 
+    font-weight: normal; 
     pointer-events: none;
 }
 
@@ -115,4 +123,29 @@ textarea{
 
 .btn{
     margin-right: 10px;
+}
+
+.btn1, .btn2{
+    float: left;
+}
+
+.bienvenidoUsuario{
+    color: #BFA240; 
+    font-family: 'Georgia', 
+    serif; font-size: 35px; 
+    font-weight: lighter; 
+    line-height: 48px; 
+    margin: 0;
+}
+
+.fancybox-slide--iframe .fancybox-content {
+	width  : 800px;
+	height : 600px;
+	max-width  : 80%;
+	max-height : 80%;
+	margin: 0;
+}
+
+table{
+    width:50%;
 }

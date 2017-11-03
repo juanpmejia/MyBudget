@@ -4,7 +4,7 @@
 {% block content %}
 <div class="col-lg-6 col-md-offset-2">
     <div id="Presupuestos compartidos">
-        <h1><b>{{ welcome }}, {{ name }}</b></h1>
+        <h1 class="bienvenidoUsuario"><b>{{ welcome }}, {{ name }}</b></h1>
     </div>
 </div>
 
@@ -41,25 +41,30 @@
                     <div class="col-lg-6">
                         {% for category in categories %}
                         <div id="{{category['name']}}" class="inv">
-                            <a class="catStyle" >Categoria: </a>{{category['name']}}
+                            <a data-fancybox data-type="iframe" href="/expenseHist?category={{category['name']}}">Detalles de gastos</a>
                             <br>
-                            <a class="catStyle">Descripción: </a><br>{{category['description']}}
+                            <a class="catStyle" >Categoria: </a><a class="catStyle2">{{category['name']}}</a>
                             <br>
-                            <a class="catStyle">Gasto total: </a> {{category['totalCost']}}
+                            <a class="catStyle">Descripción: </a><br><a class="catStyle2">{{category['description']}}</a>
+                            <br>
+                            <a class="catStyle">Gasto total: </a> <a class="catStyle2">{{category['totalCost']}}</a>
                         </div>
                         {% endfor %}
+                        <br>
                     </div>
                 </div>
                 <br><br>
                 <div class="col-lg-10">
-                    <a href="/crearCategoria" class="btn btn-warning pull-left" id="createCat">Crear Categoría</a>
+                    <a href="/crearCategoria" class="btn btn-warning pull-left btn1" id="createCat">Crear Categoría</a>
+                    <a href="/gasto" class="btn btn-warning pull-left btn2" id="createCat">Nuevo gasto</a>
+                    
                 </div>
             </div> 
         </div>
     </div>
 </div>
 <br>
-<div class="col-lg-6 col-md-offset-2">
+<div class="col-lg-6 col-md-offset-4">
     <a href="/logout" class="btn btn-danger pull-right" id="logout">Cerrar sesión</a>
 </div>
 

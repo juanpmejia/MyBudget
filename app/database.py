@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
+
 """
 This module implements the necessary functions for the interaction with the 
 MongoDB Atlas database.
@@ -129,7 +130,7 @@ class Database():
         #print(userEmail)
         if(self.readUserByEmail(userEmail)):
             
-            print("User found")
+            #print("User found")
             categoryData = {"userEmail": userEmail,
                     "name": name,
                     "description" : description,
@@ -158,8 +159,6 @@ class Database():
         """
                         
         category = self.readCategory(userEmail, name);
-        print(category, "supercategoria")
-        print(totalCost, "totalCost")
         if(category):
             if(not newName):
                 newName = name
@@ -221,9 +220,9 @@ class Database():
         """
         incomes = []
         if(userEmail):
-            incomes = list(self.db.incomes_collection.find({"userEmail" : userEmail}))
+            incomes = list(self.incomesCollection.find({"userEmail" : userEmail}))
         elif(groupId):
-            incomes = list(self.db.incomes_collection.find({"groupId" : groupId}))
+            incomes = list(self.incomesCollection.find({"groupId" : groupId}))
         
         return incomes
     
@@ -301,6 +300,13 @@ class Database():
             "subject":owner,
             "groupBudget":groupBudget
         }
+    
+    def readGroup(self,id):
+        pass
+    def updateGroup(self):
+        pass
+    def deleteGroup(self):
+        pass
         
         
     #CRUD functions for expenses
@@ -321,18 +327,20 @@ class Database():
                     expense["userEmail"] = userEmail
                     try:
                         if(self.readCategory(userEmail, categoryName)):
+                            #print(self.readCategory(userEmail, categoryName))
                             expense["categoryName"] = categoryName
                             oldTotalCost = self.readCategory(userEmail, categoryName)["totalCost"]
                             self.updateCategory(userEmail, categoryName, totalCost = oldTotalCost + value)
+                            return self.expensesCollection.insert_one(expense)
                         else:
                             raise SystemError
                     except SystemError:
-                        raise SystemError("La categoría indicada no pertenece al usuario ",userEmail)
+                        m = "La categoria indicada no pertenece al usuario"
+                        #print(m, userEmail)
                 else:
                     raise SystemError
             except SystemError:
-                print(SystemError)
-                raise SystemError("El email indicado no pertenece a ningun usuario")
+                print("El email indicado no pertenece a ningun usuario")
         
         
         
@@ -341,12 +349,23 @@ class Database():
             #TODO    
             pass
         
-        return self.expensesCollection.insert_one(expense)
+            return self.expensesCollection.insert_one(expense)
+        
         
     
-    def readExpense(self):
-        pass
-    
+    def readExpenses(self, categoryName, userEmail=None, groupId=None):
+        """
+        Returns all the expenses from a given userEmail or groupId and category
+        """
+        expenses = []
+        if(userEmail):
+            print("user")
+            expenses = list(self.expensesCollection.find({"userEmail" : userEmail, "categoryName" : categoryName}))
+        elif(groupId):
+            expenses = list(self.db.expensesCollection.find({"groupId" : groupId, "categoryName" : categoryName}))
+        print("db expenses",expenses)
+        return expenses
+        
     def updateExpense(self):
         pass
     

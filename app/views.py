@@ -160,3 +160,14 @@ def accessDenied():
 
 app.secret_key = os.urandom(24)
 print("Ma'h secrety key is",app.secret_key)
+
+
+@app.route('/expenseHist')
+def expenseHist():
+    if('name in session'):
+        category = request.args.get("category","",type=str)
+        expenses = readExpenses(category, session['email'])
+        return render_template('expenseHistory.html',
+                                expenses = expenses,
+                                title='Historial de gasto')                            
+                           
