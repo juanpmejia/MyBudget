@@ -15,12 +15,11 @@
             <th>Monto</th>
             <th>Fecha</th>
         </tr>
-        {% for expense in expenses %}
+        {% for income in incomes %}
         <tr>
-            <td>{{expense.description}}</td>
-            <td>{{expense.value}}</td>
-            <td>{{expense.creationDate.strftime("%Y-%m-%d")}}</td>
-            <td><button type="button" class="btn btn-danger btn-sm">Eliminar</button></td>
+            <td>{{income.description}}</td>
+            <td>{{income.value}}</td>
+            <td>{{income.creationDate.strftime("%Y-%m-%d")}}</td>
         </tr>
         {% endfor %}
     </table> 

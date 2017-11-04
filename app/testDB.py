@@ -9,8 +9,8 @@ db = Database(True)
 #db.createUser("Paula", "superpass", "asd@hotmail.com", "1994-08-08", "F")
 for i in range(120):
     pass
-    db.createIncome(datetime.datetime.now(), 32, "this is just bullshit", "juanpam@javerianacali.edu.co")
-    db.createExpense("Test", datetime.datetime.now(), 4000, "I WANNA DIE "+str(i), "juanpam@javerianacali.edu.co")
+    #db.createIncome(datetime.datetime.now(), 32, "this is just bullshit", "juanpam@javerianacali.edu.co")
+    #db.createExpense("Test", datetime.datetime.now(), 4000, "I WANNA DIE "+str(i), "juanpam@javerianacali.edu.co")
     #db.createExpense("Jeje", datetime.datetime.now(), 40, "THIS SUCKS", "juanpam@javerianacali.edu.co")
     
 #print(db.readExpenses("Jeje","juanpam@javerianacali.edu.co"))

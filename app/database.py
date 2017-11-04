@@ -20,7 +20,9 @@ class Database():
                 "password": '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
                 "email" : "juanpam@javerianacali.edu.co",
                 "gender" : "M",
-                "budget" : 123456789,
+                "budget" : 0,
+                "incomesTotal": 0,
+                "expensesTotal": 0,
                 "birthDate" : datetime.datetime(1996,6,6)
     }
     
@@ -62,7 +64,7 @@ class Database():
     
     
     def createUser(self, name, password, email, birthDate, gender,
-                    budget = 0):
+                    budget = 0, incomesTotal = 0, expensesTotal = 0):
                         
         """
         Creates a new user in the database with the given data.
@@ -74,6 +76,8 @@ class Database():
                 "email" : email,
                 "gender" : gender,
                 "budget" : budget,
+                "incomesTotal" : incomesTotal,
+                "expensesTotal": expensesTotal,
                 "birthDate" : datetime.datetime.strptime(birthDate, "%Y-%m-%d")
         }
         self.usersCollection.insert_one(userData)
@@ -91,7 +95,7 @@ class Database():
         return self.usersCollection.find_one({"email": email})
 
     def updateUserByEmail(self, email, name=None, password=None, birthDate=None, gender=None,
-                    budget = None):
+                    budget = None, incomesTotal = None, expensesTotal = None):
                         
         """
         Updates an user found by it's email
@@ -109,13 +113,19 @@ class Database():
                 gender = user['gender']
             if(not budget):
                 budget = user['budget']
+            if(not incomesTotal):
+                incomesTotal = user['incomesTotal']
+            if(not expensesTotal):
+                expensesTotal = user['expensesTotal']
                 
         return self.usersCollection.update_one({"email": email}, {"$set" : 
                                                 {"name" : name, 
                                                     "gender" : gender,
                                                     "password" : password,
                                                     "birthDate" : birthDate,
-                                                    "budget" : budget
+                                                    "budget" : budget,
+                                                    "incomesTotal" : incomesTotal,
+                                                    "expensesTotal" : expensesTotal
                                                 }});
         
     
@@ -207,8 +217,10 @@ class Database():
             try:
                 if(self.readUserByEmail(userEmail)):
                     income["userEmail"] = userEmail
-                    oldBudget = self.readUserByEmail(userEmail)["budget"]
-                    self.updateUserByEmail(userEmail, budget=oldBudget+value)
+                    user = self.readUserByEmail(userEmail)
+                    oldBudget = user["budget"]
+                    oldIncomes = user["incomesTotal"]
+                    self.updateUserByEmail(userEmail, budget=oldBudget+value, incomesTotal=oldIncomes+value)
                 else:
                     raise SystemError
             except SystemError:
@@ -243,6 +255,8 @@ class Database():
     def updateIncome(self, incomeId, creationDate=None, value=None, description="", userEmail=None, groupId=None):
         """
         Updates the income with the given id with the given values
+        
+        NOTE: THIS FUNCTION NEEDS TO BE REVISED
         """
         income = readIncomeById(incomeId)
         if(not creationDate):
@@ -338,7 +352,11 @@ class Database():
                             #print(self.readCategory(userEmail, categoryName))
                             expense["categoryName"] = categoryName
                             oldTotalCost = self.readCategory(userEmail, categoryName)["totalCost"]
+                            user = self.readUserByEmail(userEmail)
+                            oldBudget = user["budget"]
+                            oldCosts = user["expensesTotal"]
                             self.updateCategory(userEmail, categoryName, totalCost = oldTotalCost + value)
+                            self.updateUserByEmail(userEmail, budget = oldBudget - value, expensesTotal = oldCosts + value)
                             return self.expensesCollection.insert_one(expense)
                         else:
                             raise SystemError

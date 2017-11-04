@@ -139,6 +139,8 @@ def lobby():
                                 categories = categories,
                                 name = session["name"],
                                 budget = locale.currency(user["budget"], grouping = True),
+                                incomesTotal = locale.currency(user["incomesTotal"], grouping = True),
+                                expensesTotal = locale.currency(user["expensesTotal"], grouping = True),
                                 welcome = "Bienvenido" if session["gender"] == "M" else "Bienvenida")
     else:
         return redirect("/accessdenied")
@@ -179,12 +181,24 @@ print("Ma'h secrety key is",app.secret_key)
 
 @app.route('/expenseHist')
 def expenseHist():
-    if('name in session'):
+    if('name' in session):
         category = request.args.get("category","",type=str)
-        expenses = readExpenses(category, session['email'])
+        expenses = readExpenses(category, session['email'])[::-1]
         for expense in expenses:
             expense['value'] = locale.currency(expense['value'], grouping = True)
         return render_template('expenseHistory.html',
                                 expenses = expenses,
                                 title='Historial de gasto')                            
-                           
+
+
+@app.route('/incomeHist')
+def incomeHist():
+    if('name' in session):
+        incomes = readIncomes(session['email'])[::-1]
+        for income in incomes:
+            income['value'] = locale.currency(income['value'], grouping = True)
+        return render_template('incomeHistory.html',
+                                incomes = incomes,
+                                title='Historial de ingresos')
+    else:
+        return redirect("/accessdenied")

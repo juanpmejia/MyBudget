@@ -136,6 +136,13 @@ def createIncome(form, userEmail=None, groupId=None):
         return db.createIncome(creationDate, form["value"], description, userEmail=userEmail)
     elif(groupId):
         return db.createIncome(creationDate, form["value"], description, groupId=groupId)
+    
+def readIncomes(userEmail=None, groupId=None):
+    """
+    Reads the expenses from the database using the given userEmail or groupId
+    """
+    db = Database()
+    return db.readIncomes(userEmail, groupId)
         
 ######----EXPENSE FUNCTIONS----#####
 
