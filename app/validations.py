@@ -125,7 +125,7 @@ def getCategories(userEmail):
 
 def createIncome(form, userEmail=None, groupId=None):
     """
-    Creates a income for the given userEmail or groupId on the database
+    Creates an income for the given userEmail or groupId on the database
     """
     db = Database()
     creationDate = datetime.datetime.now()
@@ -138,6 +138,47 @@ def createIncome(form, userEmail=None, groupId=None):
         return db.createIncome(creationDate, form["value"], description, groupId=groupId)
         
 ######----EXPENSE FUNCTIONS----#####
+
+def validExpense(form, userEmail=None, groupId=None):
+    """
+    Checks if it's valid to create a expense with the given category and userEmail or groupId
+    """
+    db = Database()
+    creationDate = datetime.datetime.now()
+    value = form["Expense"]
+    description = form["descrip"]
+    categoryName = form["cat"]
+    
+    ans = True
+    if(userEmail):
+        if(db.readCategory(userEmail,categoryName)):
+            ans = True
+        else:
+            ans = False
+    elif(groupId):
+        pass
+    else:
+        ans = False
+        
+    return ans
+
+
+def createExpense(form, userEmail=None, groupId=None):
+    """
+    Creates an expense for the given userEmail or groupId on the database
+    """
+    db = Database()
+    creationDate = datetime.datetime.now()
+    value = form["Expense"]
+    description = form["descrip"]
+    categoryName = form["cat"]
+
+    if(userEmail):
+        return db.createExpense(categoryName, creationDate, value, description, userEmail=userEmail)
+    elif(groupId):
+        return db.createIncome(categoryName, creationDate, value, description, groupId=groupId)
+
+
 def readExpenses(category, userEmail=None, groupId=None):
     """
     Reads the expenses from the database using the given userEmail or groupId

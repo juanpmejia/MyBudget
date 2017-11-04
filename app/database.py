@@ -24,6 +24,12 @@ class Database():
                 "birthDate" : datetime.datetime(1996,6,6)
     }
     
+    defCat = { "userEmail": "juanpam@javerianacali.edu.co",
+                "name": 'Test',
+                "description" : "This is just a test category",
+                "totalCost": 0
+    }
+    
     #Static client
     #aguacate-2017 is the password and mybudget the user
     client = MongoClient("mongodb://mybudget:aguacate-2017@cluster0-shard-00-00-qo8mp.mongodb.net:27017,cluster0-shard-00-01-qo8mp.mongodb.net:27017,cluster0-shard-00-02-qo8mp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
@@ -48,7 +54,9 @@ class Database():
         self.db.create_collection("expenses_collection", validator=validatorQuery)
         
         defaultUser = self.defData.copy()
-        self.usersCollection.insert_one(defaultUser).inserted_id
+        defaultCategory = self.defCat.copy()
+        self.usersCollection.insert_one(defaultUser)
+        self.categoriesCollection.insert_one(defaultCategory)
     
     #CRUD Functions for the user
     
@@ -125,7 +133,7 @@ class Database():
         Creates a new category in the database with the given data.
         NOTE: Doesn't check if a category with the given userEmail and name already exists.
         
-        if the given userEmail isnt registered the category is not created
+        if the given userEmail isn't registered the category is not created
         """
         #print(userEmail)
         if(self.readUserByEmail(userEmail)):
@@ -336,7 +344,7 @@ class Database():
                             raise SystemError
                     except SystemError:
                         m = "La categoria indicada no pertenece al usuario"
-                        #print(m, userEmail)
+                        print(m, userEmail)
                 else:
                     raise SystemError
             except SystemError:
@@ -359,11 +367,11 @@ class Database():
         """
         expenses = []
         if(userEmail):
-            print("user")
+            #print("user")
             expenses = list(self.expensesCollection.find({"userEmail" : userEmail, "categoryName" : categoryName}))
         elif(groupId):
             expenses = list(self.db.expensesCollection.find({"groupId" : groupId, "categoryName" : categoryName}))
-        print("db expenses",expenses)
+        #print("db expenses",expenses)
         return expenses
         
     def updateExpense(self):

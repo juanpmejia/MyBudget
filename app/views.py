@@ -79,10 +79,25 @@ def balance():
                             title='Balance')
 
 
-@app.route('/gasto')
+@app.route('/gasto', methods = ['GET', 'POST'])
 def gasto():
-    return render_template('gasto.html',
-                            title='Ingreso de gasto')                            
+    if('name' in session):
+        if(request.method == 'GET'):
+            categories = getCategories(session['email'])
+            return render_template('gasto.html',
+                                    categories = categories,
+                                    title='Ingreso de gasto')
+        elif(request.method == 'POST'):
+            print("Estan tratando de registrar gasto con form", request.form)
+            if(validExpense(request.form,session['email'])):
+                print("CREEARE GASTO")
+                createExpense(request.form,session['email'])
+                print("CREE GASTO")
+            else:
+                print("gasto no valido")
+            return redirect("/lobby")
+    else:
+        return redirect("/accessdenied")
                            
                          
 @app.route('/crearCategoria', methods = ['GET', 'POST'])
@@ -167,6 +182,8 @@ def expenseHist():
     if('name in session'):
         category = request.args.get("category","",type=str)
         expenses = readExpenses(category, session['email'])
+        for expense in expenses:
+            expense['value'] = locale.currency(expense['value'], grouping = True)
         return render_template('expenseHistory.html',
                                 expenses = expenses,
                                 title='Historial de gasto')                            
