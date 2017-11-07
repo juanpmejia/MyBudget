@@ -5,7 +5,7 @@ import datetime
 
 
 
-db = Database(False)
+db = Database(True)
 #db.createUser("Paula", "superpass", "asd@hotmail.com", "1994-08-08", "F")
 for i in range(120):
     pass
@@ -14,13 +14,17 @@ for i in range(120):
     #db.createExpense("Jeje", datetime.datetime.now(), 40, "THIS SUCKS", "juanpam@javerianacali.edu.co")
 
 
+#print(db.readUsers('^'))
 # print(db.readExpenses("C1", groupId = "5a012de1b369205de91af247"))
 
 # groupId = "5a012de1b369205de91af247"
 # print(groupId, ObjectId(groupId))
 
 # print(list(db.expensesCollection.find({"groupId" : ObjectId(groupId), "categoryName" : "C1"})))
-#db.createGroup("juanpam@javerianacali.edu.co", "Grupo prueba")
+# groupId = db.createGroup("juanpam@javerianacali.edu.co", "Grupo prueba").inserted_id
+# print(groupId)
+
+# db.addUserGroup(groupId, "juanpam@javerianacali.edu.co")
 #print(db.readGroups("juanpam@javerianacali.edu.co"))
 
 #print(db.readGroupBySubject("GrUpo prueba", "juanpam@javerianacali.edu.co"))

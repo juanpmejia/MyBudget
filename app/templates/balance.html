@@ -2,34 +2,54 @@
 {% block content %}
 <script type="text/javascript">
 window.onload = function () {
-	var chart = new CanvasJS.Chart("chartContainer",
+	var chart = new CanvasJS.Chart("chartContainer1",
 	{
 		title:{
 			text: "Balance Gastos Semanales"
 		},
-		legend: {
-			maxWidth: 350,
-			itemWidth: 120
+		data: [
+		{
+			type: "bar",
+			name: "Categorías",
+			color: "#014D65",
+			showInLegend: true,
+			dataPoints: [
+			{% for category in categories%}
+				{ y: {{category['totalCost']}} , label: "{{category['name']}}"},
+			{% endfor %}
+			]
+		},
+		]
+	});
+	chart.render();
+
+var chart2 = new CanvasJS.Chart("chartContainer2",
+	{
+		title:{
+			text: "Detalles usuario"
 		},
 		data: [
 		{
 			type: "bar",
-			showInLegend: true,
-			legendText: "{indexLabel}",
+			name: "Categorías",
+			showInLegend: false,
 			dataPoints: [
-				{ y: 4181563, indexLabel: "Comida" },
-				{ y: 2175498, indexLabel: "Transporte" },
-				{ y: 3125844, indexLabel: "Servicios Públicos" },
-				{ y: 1176121, indexLabel: "Otros"}
+				{ y: {{user['incomesTotal']}} , label: "Total de ingresos"},
+				{ y: {{user['expensesTotal']}} , label: "Total de gastos"},
+				{ y: {{user['budget']}} , label: "Presupuesto"},
+			
 			]
-		}
+		},
 		]
 	});
-	chart.render();
+	chart2.render();
 }
 </script>
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+<div id="chartContainer2" style="height: 300px; width: 100%;"></div>
+
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 {% endblock %}

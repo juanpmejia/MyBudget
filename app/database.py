@@ -44,6 +44,7 @@ class Database():
         self.incomesCollection = self.db.incomes_collection
         self.expensesCollection = self.db.expenses_collection
         self.groupsCollection = self.db.groups_collection
+        self.groupsUsersCollection = self.db.groups_users_collection
         if(initializeDatabase):
             self.client.drop_database("MyBudget")    
             self.initializeDatabase()
@@ -56,6 +57,9 @@ class Database():
         validatorQuery = {"$or" : [{"userEmail" : {"$exists" : "true"}}, {"groupId" : {"$exists" : "true"}}]}
         self.db.create_collection("incomes_collection", validator=validatorQuery)
         self.db.create_collection("expenses_collection", validator=validatorQuery)
+        
+        validatorQuery = {"userEmail" : {"$exists" : "true"}, "groupId" : {"$exists" : "true"}}
+        self.db.create_collection("groups_users_collection", validator = validatorQuery)
         
         defaultUser = self.defData.copy()
         defaultCategory = self.defCat.copy()
@@ -95,6 +99,13 @@ class Database():
         Returns an user found by it's email
         """
         return self.usersCollection.find_one({"email": email})
+    
+    def readUsers(self, regex):
+        """
+        Returns all users matching the regex expression
+        """
+        regex = re.compile(regex)
+        return list(self.usersCollection.find({"email" : regex}))
 
     def updateUserByEmail(self, email, name=None, password=None, birthDate=None, gender=None,
                     budget = None, incomesTotal = None, expensesTotal = None):
@@ -129,7 +140,7 @@ class Database():
                                                     "incomesTotal" : incomesTotal,
                                                     "expensesTotal" : expensesTotal
                                                 }});
-        
+    
     
     def deleteUserByEmail(self, email):
         """
@@ -349,7 +360,7 @@ class Database():
 
 
     #CRUD functions for groups
-    def createGroup(self, owner, subject, description = 0, budget = 0):
+    def createGroup(self, owner, subject, description = 0, budget = 0, members=[]):
         """
         Creates a new group in the database with the given data.
         """
@@ -362,7 +373,11 @@ class Database():
             "expensesTotal" : 0
         }
         if(self.readUserByEmail(owner)):
-            return self.groupsCollection.insert_one(groupData)
+            
+            result = self.groupsCollection.insert_one(groupData)
+            for member in members:
+                self.addUserGroup(result.inserted_id, member, "normal")
+            return result
         else:
             print("Usuario no existe")
     
@@ -370,7 +385,8 @@ class Database():
         """
         Returns all the groups from a user given it's userEmail
         """
-        return list(self.groupsCollection.find({"owner" : userEmail}))
+        groupsIds = [g['groupId'] for g in list(self.groupsUsersCollection.find({"userEmail" : userEmail}))]
+        return [self.readGroupById(gId) for gId in groupsIds]
 
     def readGroupBySubject(self, subject, userEmail):
         """
@@ -417,6 +433,48 @@ class Database():
         
     def deleteGroup(self):
         pass
+    
+    
+    def addUserGroup(self, groupId, userEmail, role="normal"):
+        """
+        Adds the given user to a group if not added yet
+        """
+        
+        if(self.readGroupById(groupId) and self.readUserByEmail(userEmail)):
+            if(not self.checkUserInGroup(groupId, userEmail)):
+                groupsUsersData = {
+                    "groupId" : ObjectId(groupId),
+                    "userEmail" : userEmail,
+                    "role": role
+                }
+                return self.groupsUsersCollection.insert_one(groupsUsersData)
+            else:
+                print("El usuario",userEmail,"ya pertenece al grupo.")
+        else:
+            if(not self.readGroupById(groupId)):
+                print("El grupo no existe",groupId)
+            else:
+                print("El usuario no existe",userEmail)
+    
+    def readMembers(self, groupId):
+        """
+        Reads all the members in a group
+        """
+        users = list(self.groupsUsersCollection.find({"groupId" : ObjectId(groupId)}))
+        print(users)
+        emails = [user['userEmail'] for user in users]
+        members = []
+        for e in emails:
+            members.append(self.readUserByEmail(e))
+        return members
+        
+        
+    
+    def checkUserInGroup(self, groupId, userEmail):
+        """
+        Checks if the given user is in the group given
+        """
+        return True if self.groupsUsersCollection.find_one({"groupId" : ObjectId(groupId), "userEmail" : userEmail}) else False
         
         
     #CRUD functions for expenses

@@ -19,9 +19,9 @@ def validEmail(email):
     """
     db = Database()
     if(db.readUserByEmail(email)):
-        print("Encontre el usuario con ese email")
+        print("Encontre el usuario con ese email",email)
     else:
-        print("No hay ningun usuario con ese email")
+        print("No hay ningun usuario con ese email",email)
     
     return False if db.readUserByEmail(email) else True
 
@@ -74,6 +74,14 @@ def createUser(form):
 def getUser(email):
     return Database().readUserByEmail(email)
 
+def getUsersStartingWith(start):
+    """
+    Returns all the users whose email starts with 'start'
+    """
+    
+    db = Database()
+    
+    return db.readUsers("^"+start)
 
 ######----CATEGORY FUNCTIONS----#####
 
@@ -207,8 +215,19 @@ def validGroup(owner, form):
     """
     Returns True if a group is valid for creation. False otherwise.
     """
+    print("el grupoa validar es",form)
     db = Database()
-    return False if db.readGroupBySubject(owner, form['subject']) else True
+    ans = True
+    for k in form.keys():
+        if("member" in k and k!="member"):
+            print("k es",k)
+            if(not registeredEmail(form[k])):
+                ans = False
+                break
+    if db.readGroupBySubject(owner, form['subject']):
+        ans = False
+    
+    return ans
 
 
 def createGroup(owner, form):
@@ -218,22 +237,29 @@ def createGroup(owner, form):
     NOTE: YOU SHOULD CHECK IF THE GIVEN GROUP ALREADY EXISTS BEFORE
     """
     db = Database()
+    print("el grupo a crear es",form)
     
+    members = [owner]
     groupData = {
         "owner" : owner,
         "subject" : form["subject"],
         "description" : form["descrip"],
         "budget" : 0
     }
+    
+    for k in form.keys():
+        if("member" in k and k!="member"):
+            members.append(form[k])
+    groupData['members'] = members
     db.createGroup(**groupData)
 
-def readGroups(owner):
+def readGroups(userEmail):
     """
-    Gets groups for a given owner
+    Gets groups for a given userEmail
     """
     db = Database()
     
-    return db.readGroups(owner)
+    return db.readGroups(userEmail)
 
 def readGroupById(groupId):
     """
@@ -242,3 +268,20 @@ def readGroupById(groupId):
     db = Database()
     
     return db.readGroupById(groupId)
+    
+def checkUserInGroup(groupId, userEmail):
+    """
+    Checks if a user is in a group
+    """
+    db = Database()
+    print("lalal",groupId,userEmail)
+    return db.checkUserInGroup(groupId, userEmail)
+
+def getMembers(groupId):
+    """
+    Gets all the members from a group 
+    """
+    db = Database()
+    
+    return db.readMembers(groupId)
+    

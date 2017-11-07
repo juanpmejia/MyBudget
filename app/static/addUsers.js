@@ -17,6 +17,8 @@ function addFields(){
                 input.className = "form-control";
                 input.placeholder = "Ingrese correo del usuario";
                 container.appendChild(input);
+                var source = ["lala","lele","lili"]
+                $('[name=member'+i+']').autocomplete({source : "/getUsers"});
                 // Append a line break 
                 container.appendChild(document.createElement("br"));
             }

@@ -2,7 +2,7 @@ document
     .getElementById("targetCat")
     .addEventListener('change', function () {
         'use strict';
-        var vis = document.querySelector('.vis, .cat'),   
+        var vis = document.querySelector('.vis.cat'),   
         target = document.getElementById(this.value);
         console.log("fuck")
         if (vis !== null) {
@@ -18,7 +18,7 @@ document
     .getElementById("targetGroup")
     .addEventListener('change', function () {
         'use strict';
-        var vis = document.querySelector('.vis, .group'),   
+        var vis = document.querySelector('.vis.group'),   
         target = document.getElementById(this.value);
         console.log("fuck")
         if (vis !== null) {

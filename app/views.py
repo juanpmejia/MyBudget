@@ -3,7 +3,7 @@ import locale
 from flask import render_template, redirect, url_for, flash, jsonify, redirect, request, session
 from app import app
 from .forms import LoginForm
-
+from bson.json_util import dumps
 from .validations import *
 
 
@@ -70,14 +70,32 @@ def try_login():
         print("Invalid email")
         ans = "Email invalido"
     return jsonify(ans=ans)
-    
+
+@app.route('/getUsers')
+def geUsers():
+    startingWith = request.args.get("term","",type=str)
+    ans = []
+    if(startingWith):
+        print("buscando usuarios que empiecen por",startingWith)
+        data = getUsersStartingWith(startingWith)
+        for d in data:
+            ans.append({"label" : d["email"], "value" : d["email"]})
+    print(ans)
+    return dumps(ans)
                            
 
 @app.route('/balance')
 def balance():
-    return render_template('balance.html',
-                            title='Balance')
-
+    if('name' in session):
+        categories = getCategories(session['email'])
+        user = getUser(session['email'])
+        print(categories)
+        return render_template('balance.html',
+                                categories = categories,
+                                user = user,
+                                title='Balance')
+    else:
+        return redirect("/accesdenied")
 
 @app.route('/gasto', methods = ['GET', 'POST'])
 def gasto():
@@ -267,21 +285,37 @@ def colabBudget():
 def lobbyGroup():
     if('name' in session):
         groupId = request.args.get("groupId","",type=str)
-        group = readGroupById(groupId)
-        categories = getCategories(groupId = groupId)
-        for c in categories:
-            c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
-        group['budget'] = locale.currency(group['budget'], grouping = True)
-        group['incomesTotal'] = locale.currency(group['incomesTotal'], grouping = True)
-        group['expensesTotal'] = locale.currency(group['expensesTotal'], grouping = True)
-        print(categories)
-        return render_template('lobbyGroup.html',
-                                group = group,
-                                categories = categories,
-                                title='Lobby grupal')
+        if(checkUserInGroup(groupId, session['email'])):
+            group = readGroupById(groupId)
+            categories = getCategories(groupId = groupId)
+            for c in categories:
+                c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
+            group['budget'] = locale.currency(group['budget'], grouping = True)
+            group['incomesTotal'] = locale.currency(group['incomesTotal'], grouping = True)
+            group['expensesTotal'] = locale.currency(group['expensesTotal'], grouping = True)
+            print(categories)
+            return render_template('lobbyGroup.html',
+                                    group = group,
+                                    categories = categories,
+                                    title='Lobby grupal')
+        else:
+            return redirect("/accessdenied")
     else:
         return redirect('/accessdenied')
-        
+
+@app.route('/memberList')
+def memberList():
+    if('name' in session):
+        print("ajsdhaiusd")
+        groupId = request.args.get("groupId", "", type=str)
+        members = getMembers(groupId)[::-1]
+        print(members,groupId,"memberlist")
+        return render_template('memberList.html',
+                                members = members,
+                                title='Lista de miembros de '+readGroupById(groupId)["subject"])
+    else:
+        return redirect("/accessdenied")
+
         
 app.secret_key = os.urandom(24)
 app.secret_key = "debug"

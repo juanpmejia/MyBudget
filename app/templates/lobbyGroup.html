@@ -18,6 +18,8 @@
                     <h4>El monto total de ingresos grupales es: {{group['incomesTotal']}}</h4>
                     <h4>El monto total de  gastos grupales es: {{group['expensesTotal']}}</h4>
                     <a data-fancybox data-type="iframe" href="/incomeHist?groupId={{group['_id']}}">Detalles de ingresos anteriores</a>
+                    <br>
+                    <a data-fancybox data-type="iframe" href="/memberList?groupId={{group['_id']}}">Detalles de miembros del presupuesto</a>
                     <div>
                         <br>
                         <a href="/deposit" class="btn btn-warning pull-left" id="createIncome">Depositar Ingreso</a><br><br>
