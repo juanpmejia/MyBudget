@@ -77,22 +77,22 @@ def getUser(email):
 
 ######----CATEGORY FUNCTIONS----#####
 
-def validCategory(userEmail, name):
+def validCategory(name, userEmail = None,  groupId = None):
     """
     Checks if the given category is valid for registration
     """
     db = Database()
-    return False if db.readCategory(userEmail, name) else True
+    return False if db.readCategory(name, userEmail, groupId) else True
 
-def validCategoryForm(form, userEmail):
+def validCategoryForm(form, userEmail=None, groupId=None):
     """
     Checks if the given form is valid for category registration
     """
     print("Super formulariop")
     print(form, "Formulario")
-    return validCategory(userEmail, form["Category"])
+    return validCategory(form["Category"], userEmail = userEmail, groupId = groupId)
 
-def createCategory(form, userEmail):
+def createCategory(form, userEmail=None, groupId=None):
     """
     Creates a category in the database. 
     NOTE: YOU SHOULD CHECK IF THE CATEGORY ALREADY EXISTS BEFORE CALLING THIS FUNCTION
@@ -105,21 +105,25 @@ def createCategory(form, userEmail):
     db = Database()
     
     categoryData = {"userEmail": userEmail,
+                    "groupId" : groupId,
                     "name": name,
                     "description": description,
                     "totalCost": 0
     }
-    
+
     db.createCategory(**categoryData)
     
 
-def getCategories(userEmail):
+def getCategories(userEmail=None, groupId=None):
     """
     Gets a list of categories of the user with the given userEmail
     """
     
     db = Database()
-    return db.readCategoriesByUserEmail(userEmail)
+    if(userEmail):
+        return db.readCategoriesByUserEmail(userEmail)
+    elif(groupId):
+        return db.readCategoriesByGroupId(groupId)
     
 ######----INCOME FUNCTIONS----#####
 
@@ -158,12 +162,15 @@ def validExpense(form, userEmail=None, groupId=None):
     
     ans = True
     if(userEmail):
-        if(db.readCategory(userEmail,categoryName)):
+        if(db.readCategory(categoryName, userEmail)):
             ans = True
         else:
             ans = False
     elif(groupId):
-        pass
+        if(db.readCategory(categoryName, groupId = groupId)):
+            ans = True
+        else:
+            ans = False
     else:
         ans = False
         
@@ -183,7 +190,7 @@ def createExpense(form, userEmail=None, groupId=None):
     if(userEmail):
         return db.createExpense(categoryName, creationDate, value, description, userEmail=userEmail)
     elif(groupId):
-        return db.createIncome(categoryName, creationDate, value, description, groupId=groupId)
+        return db.createExpense(categoryName, creationDate, value, description, groupId=groupId)
 
 
 def readExpenses(category, userEmail=None, groupId=None):
@@ -192,3 +199,46 @@ def readExpenses(category, userEmail=None, groupId=None):
     """
     db = Database()
     return db.readExpenses(category, userEmail, groupId)
+
+
+######----GROUP FUNCTIONS----#####
+
+def validGroup(owner, form):
+    """
+    Returns True if a group is valid for creation. False otherwise.
+    """
+    db = Database()
+    return False if db.readGroupBySubject(owner, form['subject']) else True
+
+
+def createGroup(owner, form):
+    """
+    Creates a group for the given owner in the database.
+    
+    NOTE: YOU SHOULD CHECK IF THE GIVEN GROUP ALREADY EXISTS BEFORE
+    """
+    db = Database()
+    
+    groupData = {
+        "owner" : owner,
+        "subject" : form["subject"],
+        "description" : form["descrip"],
+        "budget" : 0
+    }
+    db.createGroup(**groupData)
+
+def readGroups(owner):
+    """
+    Gets groups for a given owner
+    """
+    db = Database()
+    
+    return db.readGroups(owner)
+
+def readGroupById(groupId):
+    """
+    Gets a group by its id
+    """
+    db = Database()
+    
+    return db.readGroupById(groupId)

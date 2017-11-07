@@ -12,6 +12,7 @@ from pymongo import MongoClient, ASCENDING, DESCENDING
 from collections import *
 from bson.objectid import ObjectId
 import datetime
+import re
 class Database():
     
     
@@ -42,6 +43,7 @@ class Database():
         self.categoriesCollection = self.db.categories_collection
         self.incomesCollection = self.db.incomes_collection
         self.expensesCollection = self.db.expenses_collection
+        self.groupsCollection = self.db.groups_collection
         if(initializeDatabase):
             self.client.drop_database("MyBudget")    
             self.initializeDatabase()
@@ -138,25 +140,32 @@ class Database():
         
     #CRUD functions for the category---------------------
         
-    def createCategory(self, userEmail, name, description = "", totalCost=0):
+    def createCategory(self, name, userEmail=None, groupId=None,  description = "", totalCost=0):
         """
         Creates a new category in the database with the given data.
-        NOTE: Doesn't check if a category with the given userEmail and name already exists.
+        NOTE: Doesn't check if a category with the given userEmail or groupId and name already exists.
         
-        if the given userEmail isn't registered the category is not created
+        if the given userEmail or groupId isn't registered the category is not created
         """
         #print(userEmail)
-        if(self.readUserByEmail(userEmail)):
-            
-            #print("User found")
-            categoryData = {"userEmail": userEmail,
-                    "name": name,
-                    "description" : description,
-                    "totalCost": 0
-            }
-            
-            self.categoriesCollection.insert_one(categoryData)
         
+        categoryData = {"name": name,
+                        "description" : description,
+                        "totalCost": 0
+                }
+                
+        if(userEmail):
+            if(self.readUserByEmail(userEmail)):
+                
+                #print("User found")
+                categoryData["userEmail"] = userEmail
+                return self.categoriesCollection.insert_one(categoryData)
+        elif(groupId):
+            if(self.readGroupById(groupId)):
+                categoryData["groupId"] = ObjectId(groupId)
+                return self.categoriesCollection.insert_one(categoryData)
+                
+                
         
     def readCategoriesByUserEmail(self, userEmail):
         """
@@ -164,34 +173,51 @@ class Database():
         """
         return list(self.categoriesCollection.find({"userEmail": userEmail}))
     
-    def readCategory(self, userEmail, name):
+    def readCategoriesByGroupId(self, groupId):
+        """
+        Returns a list of all the categories of the given user
+        """
+        return list(self.categoriesCollection.find({"groupId": ObjectId(groupId)}))
+    
+    def readCategory(self, name, userEmail=None, groupId = None):
         """
         Returns the given category if exists
         """
-        return self.categoriesCollection.find_one({"userEmail": userEmail, "name": name})
+        if(userEmail):
+            return self.categoriesCollection.find_one({"userEmail": userEmail, "name": name})
+        elif(groupId):
+            return self.categoriesCollection.find_one({"groupId": ObjectId(groupId), "name": name})
         
-    def updateCategory(self, userEmail, name, newName = None, description = None, totalCost = None):
+        
+    def updateCategory(self, name, userEmail=None, groupId=None, newName = None, description = None, totalCost = None):
         
         """
         Updates an user found by it's email
         """
                         
-        category = self.readCategory(userEmail, name);
+        category = self.readCategory(name, userEmail, groupId);
         if(category):
             if(not newName):
                 newName = name
             if(not description):
                 description = category['description']
             if(not totalCost):
-                
                 totalCost = category['totalCost']
-    
-        return self.categoriesCollection.update_one({"userEmail": userEmail,
-                                                "name": name}, {"$set" : 
-                                                {"userEmail" : userEmail, 
-                                                    "name" : newName,
-                                                    "totalCost" : totalCost,
-                                                }})
+                
+        if(userEmail):
+            return self.categoriesCollection.update_one({"userEmail": userEmail,
+                                                    "name": name}, {"$set" : 
+                                                    {"userEmail" : userEmail, 
+                                                        "name" : newName,
+                                                        "totalCost" : totalCost,
+                                                    }})
+        elif(groupId):
+            return self.categoriesCollection.update_one({"groupId": ObjectId(groupId),
+                                                    "name": name}, {"$set" : 
+                                                    {"userEmail" : userEmail, 
+                                                        "name" : newName,
+                                                        "totalCost" : totalCost,
+                                                    }})
         
     def deleteCategory(self, userEmail, name):
         """
@@ -227,7 +253,17 @@ class Database():
                 raise SystemError("El email indicado no pertenece a ningun usuario")
             
         elif(groupId):
-            #TODO    
+            try:
+                if(self.readGroupById(groupId)):
+                    income["groupId"] = ObjectId(groupId)
+                    group = self.readGroupById(groupId)
+                    oldBudget = group["budget"]
+                    oldIncomes = group["incomesTotal"]
+                    self.updateGroupById(groupId, budget=oldBudget+value, incomesTotal=oldIncomes+value)
+                else:
+                    raise SystemError
+            except SystemError:
+                raise SystemError("El id indicado no pertenece a ningun grupo")   
             pass
         
         return self.incomesCollection.insert_one(income)
@@ -242,7 +278,7 @@ class Database():
         if(userEmail):
             incomes = list(self.incomesCollection.find({"userEmail" : userEmail}))
         elif(groupId):
-            incomes = list(self.incomesCollection.find({"groupId" : groupId}))
+            incomes = list(self.incomesCollection.find({"groupId" : ObjectId(groupId)}))
         
         return incomes
     
@@ -300,7 +336,7 @@ class Database():
             #TODO    
             pass
                
-        return self.db.incomes_collection.update_one({"_id" : incomeId}, 
+        return self.db.incomes_collection.update_one({"_id" : ObjectId(incomeId)}, 
                                                 {"$set" : 
                                                     updatedIncome
                                                 })
@@ -313,20 +349,72 @@ class Database():
 
 
     #CRUD functions for groups
-    def createGroup(self, owner, subject, groupBudget=0):
+    def createGroup(self, owner, subject, description = 0, budget = 0):
         """
         Creates a new group in the database with the given data.
         """
         groupData={
-            "owner":owner,
-            "subject":owner,
-            "groupBudget":groupBudget
+            "owner": owner,
+            "subject": subject,
+            "description": description,
+            "budget": budget,
+            "incomesTotal" : budget,
+            "expensesTotal" : 0
         }
+        if(self.readUserByEmail(owner)):
+            return self.groupsCollection.insert_one(groupData)
+        else:
+            print("Usuario no existe")
     
-    def readGroup(self,id):
-        pass
-    def updateGroup(self):
-        pass
+    def readGroups(self, userEmail):
+        """
+        Returns all the groups from a user given it's userEmail
+        """
+        return list(self.groupsCollection.find({"owner" : userEmail}))
+
+    def readGroupBySubject(self, subject, userEmail):
+        """
+        Returns the group with the given subject, no case sensitive, with the
+        given owner's userEmail. Ignores case
+        """
+        subject = re.compile(subject, re.IGNORECASE)
+        return self.groupsCollection.find_one({"subject" : subject , "owner" : userEmail})
+        
+    def readGroupById(self,groupId):
+        """
+        Returns the group with the given subject, no case sensitive, with the
+        given owner's userEmail. Ignores case
+        """
+        
+        return self.groupsCollection.find_one({"_id" : ObjectId(groupId)})
+        
+    def updateGroupById(self,groupId,subject=None, description=None, budget=None, incomesTotal=None, expensesTotal=None):
+        
+        groupOld = self.readGroupById(groupId)
+        
+        if(not subject):
+            subject = groupOld["subject"]
+        if(not description):
+            description = groupOld["description"]
+        if(not budget):
+            budget = groupOld["budget"]
+        if(not incomesTotal):
+            incomesTotal = groupOld["incomesTotal"]
+        if(not expensesTotal):
+            expensesTotal = groupOld["expensesTotal"]
+        
+        return self.groupsCollection.update_one({"_id" : ObjectId(groupId)}, 
+                                                {"$set":
+                                                    { 
+                                                    "subject" : subject,
+                                                    "description" : description,
+                                                    "budget" : budget,
+                                                    "incomesTotal" : incomesTotal,
+                                                    "expensesTotal" : expensesTotal
+                                                    }
+                                                })
+        
+        
     def deleteGroup(self):
         pass
         
@@ -338,6 +426,7 @@ class Database():
         Creates an expense for the specified user or groupId with the given value
         """
         value = int(value)
+        print("El costo es de",value)
         expense = {"creationDate" : creationDate,
                     "value" : value,
                     "description" : description
@@ -348,14 +437,14 @@ class Database():
                 if(self.readUserByEmail(userEmail)):
                     expense["userEmail"] = userEmail
                     try:
-                        if(self.readCategory(userEmail, categoryName)):
+                        if(self.readCategory(categoryName, userEmail)):
                             #print(self.readCategory(userEmail, categoryName))
                             expense["categoryName"] = categoryName
-                            oldTotalCost = self.readCategory(userEmail, categoryName)["totalCost"]
+                            oldTotalCost = self.readCategory(categoryName, userEmail)["totalCost"]
                             user = self.readUserByEmail(userEmail)
                             oldBudget = user["budget"]
                             oldCosts = user["expensesTotal"]
-                            self.updateCategory(userEmail, categoryName, totalCost = oldTotalCost + value)
+                            self.updateCategory(categoryName, userEmail, totalCost = oldTotalCost + value)
                             self.updateUserByEmail(userEmail, budget = oldBudget - value, expensesTotal = oldCosts + value)
                             return self.expensesCollection.insert_one(expense)
                         else:
@@ -372,8 +461,29 @@ class Database():
         
             
         elif(groupId):
-            #TODO    
-            pass
+            try:
+                if(self.readGroupById(groupId)):
+                    expense["groupId"] = ObjectId(groupId)
+                    try:
+                        if(self.readCategory(categoryName, groupId = groupId)):
+                            #print(self.readCategory(userEmail, categoryName))
+                            expense["categoryName"] = categoryName
+                            oldTotalCost = self.readCategory(categoryName, groupId = groupId)["totalCost"]
+                            group = self.readGroupById(groupId)
+                            oldBudget = group["budget"]
+                            oldCosts = group["expensesTotal"]
+                            self.updateCategory(categoryName, groupId = groupId, totalCost = oldTotalCost + value)
+                            self.updateGroupById(groupId, budget = oldBudget - value, expensesTotal = oldCosts + value)
+                            return self.expensesCollection.insert_one(expense)
+                        else:
+                            raise SystemError
+                    except SystemError:
+                        m = "La categoria indicada no pertenece al usuario"
+                        print(m, userEmail)
+                else:
+                    raise SystemError
+            except SystemError:
+                print("El email indicado no pertenece a ningun usuario")
         
             return self.expensesCollection.insert_one(expense)
         
@@ -388,8 +498,8 @@ class Database():
             #print("user")
             expenses = list(self.expensesCollection.find({"userEmail" : userEmail, "categoryName" : categoryName}))
         elif(groupId):
-            expenses = list(self.db.expensesCollection.find({"groupId" : groupId, "categoryName" : categoryName}))
-        #print("db expenses",expenses)
+            expenses = list(self.expensesCollection.find({"groupId" : ObjectId(groupId), "categoryName" : categoryName}))
+        print("db expenses",expenses, categoryName, userEmail, groupId)
         return expenses
         
     def updateExpense(self):

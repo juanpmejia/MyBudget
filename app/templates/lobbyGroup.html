@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="col-lg-6 col-md-offset-2">
+    <div id="Presupuestos compartidos">
+        <h1 class="bienvenidoUsuario"><b>Presupuesto: {{group['subject']}}</b></h1>
+    </div>
+</div>
+
+<div class="col-lg-8 col-md-offset-2">
+    <h2>Presupuesto colaborativo</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+                <div id="presupuesto personal">
+                    
+                    <h3>El presupuesto del grupo es : {{group['budget']}}</h3>
+                    <h4>El monto total de ingresos grupales es: {{group['incomesTotal']}}</h4>
+                    <h4>El monto total de  gastos grupales es: {{group['expensesTotal']}}</h4>
+                    <a data-fancybox data-type="iframe" href="/incomeHist?groupId={{group['_id']}}">Detalles de ingresos anteriores</a>
+                    <div>
+                        <br>
+                        <a href="/deposit" class="btn btn-warning pull-left" id="createIncome">Depositar Ingreso</a><br><br>
+                    </div>
+                    <hr>
+                    <h3>Gastos totales por categoría</h3>
+                    <label>Seleccione una categoría</label>
+                    <select class="form-control" name="cat" id="targetCat">
+                        <option value"">Seleccione...</option>
+                        {% for category in categories %}
+                        <option value="{{category['name']}}">{{category['name']}}</option>
+                        {% endfor %}-->
+                    </select>
+                    <br>
+                    <div class="col-lg-13 col-md-offset-1">
+                        {% for category in categories %}
+                        <div id="{{category['name']}}" class="inv cat">
+                            <a data-fancybox data-type="iframe" data-src="/expenseHist?groupId={{group['_id']}}&category={{category['name']}}">Detalles de gastos</a>
+                            <br>
+                            <a class="catStyle" >Categoria: </a><a class="catStyle2">{{category['name']}}</a>
+                            <br>
+                            <a class="catStyle">Descripción: </a><br><a class="catStyle2">{{category['description']}}</a>
+                            <br>
+                            <a class="catStyle">Gasto total: </a> <a class="catStyle2">{{category['totalCost']}}</a>
+                        </div>
+                        {% endfor %}
+                        <br>
+                    </div>
+                </div>
+                <div>
+                    <a href="/crearCategoria?groupId={{group['_id']}}" class="btn btn-warning pull-left btn1" id="createCat">Crear Categoría</a>
+                    {% if categories%}
+                    <a href="/gasto?groupId={{group['_id']}}" class="btn btn-warning pull-left btn2" id="createExp">Nuevo gasto</a>
+                    {% endif %}
+                </div>
+                <div>
+                    <br><br>
+                    <a href="/balance" class="btn btn-success pull-left" id="balance">Ver balance</a>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+<br>
+<div class="col-lg-6 col-md-offset-4">
+    <a href="/lobby" class="btn btn-danger pull-right" id="logout">Ir al lobby</a>
+</div>
+
+
+<script type="text/javascript" src="/static/selectCat.js"></script>
+
+
+{% endblock %}

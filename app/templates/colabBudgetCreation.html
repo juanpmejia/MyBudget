@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <h1 class="titleSec">Crear presupuesto colaborativo</h1>
+        <form role="form" method = "post">
+            <div class="col-lg-6 col-md-offset-3">
+                <div class="panel panel-default">
+                <div class="panel-body">   
+                    <div class="wel well-sm"><strong><span class="glyphicon-asterisk"></span>Campo Obligatorio</strong></div>
+                    <div class="form-group">
+                        <label for="category">Ingrese nombre del presupuesto</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="subject" id="category" placeholder="Ingrese el nombre del presupuesto" required
+                            oninput="setCustomValidity('')">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                        </div>
+                    </div>
+                    <label for="descrip">Ingrese una breve descripción (Opcional)</label>
+                        <textarea class="form-control" name="descrip" id="descrip" placeholder="Ingrese descripción del presupuesto"
+                            oninput="setCustomValidity('')"></textarea> 
+                        <br>
+                    <div class="form-group">
+                        <label for="member">Ingrese el número de usuarios que harán parte del presupuesto grupal</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="member" id="member" placeholder="Ingrese cantidad de usuarios" required setCustomValidity('Por favor llene este campo')
+                            oninput="setCustomValidity(''); addFields()">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                        </div>
+                        <div>
+                            <!--<br>-->
+                            <!--<a class="button" href="#" id="filldetails" onclick="addFields()">Agregar usuarios</a> -->
+                            <br><br>
+                            <div id="container"/>
+                            <br>
+                        </div>
+                    </div>
+                    <br>
+                    <input type="submit" name="submit" id="submit" value="Crear presupuesto" class="btn btn-danger pull-right"> 
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="static/addUsers.js"></script>
+
+{% endblock %}

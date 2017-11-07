@@ -83,19 +83,31 @@ def balance():
 def gasto():
     if('name' in session):
         if(request.method == 'GET'):
-            categories = getCategories(session['email'])
+            groupId = request.args.get("groupId", None, type=str)
+            if(groupId):
+                categories = getCategories(groupId = groupId)
+            else:
+                categories = getCategories(session['email'])
             return render_template('gasto.html',
                                     categories = categories,
                                     title='Ingreso de gasto')
         elif(request.method == 'POST'):
+            groupId = request.args.get("groupId", None, type=str)
+            userEmail = session['email'] if not groupId else None
             print("Estan tratando de registrar gasto con form", request.form)
-            if(validExpense(request.form,session['email'])):
+            if(validExpense(request.form,userEmail, groupId)):
                 print("CREEARE GASTO")
-                createExpense(request.form,session['email'])
+                if(groupId):
+                    createExpense(request.form,groupId = groupId)
+                    url = "/lobbyGroup?groupId="+groupId
+                else:
+                    createExpense(request.form,session['email'])
+                    url = "/lobby"
                 print("CREE GASTO")
             else:
+                url = "/lobby"
                 print("gasto no valido")
-            return redirect("/lobby")
+            return redirect(url)
     else:
         return redirect("/accessdenied")
                            
@@ -104,11 +116,19 @@ def gasto():
 def crearCategoria():
     if "name" in session:
         if (request.method == 'POST'):
+            if("groupId" in request.args.keys()):
+                groupId = request.args.get("groupId","",type=str)
+            else:
+                groupId = None
+            print(request.args)
             print("Hice un post :D")
             error = None
-            if (validCategoryForm(request.form,session['email'])):
-                createCategory(request.form, session['email'])
-                status = "Categoria agregada satisfactoriamente"
+            if (validCategoryForm(request.form,session['email'], groupId)):
+                if(groupId):
+                    createCategory(request.form, None, groupId)
+                else:
+                    createCategory(request.form, session['email'])
+                status = "Categoria agregada satisfactoriamente."
                 buttonText = "Volver al lobby"
                 link = "/lobby"
             else:
@@ -134,8 +154,10 @@ def lobby():
         for c in categories:
             c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
         user = getUser(session['email'])
+        groups = readGroups(session['email'])
         return render_template('lobbyUsuario.html',
                                 title='Tu lobby',
+                                groups = groups,
                                 categories = categories,
                                 name = session["name"],
                                 budget = locale.currency(user["budget"], grouping = True),
@@ -150,17 +172,21 @@ def lobby():
 def deposit():
     if "name" in session:
         if(request.method =='GET'):
-            destinations = [{"name" : session["email"]}]
+            groups = readGroups(session['email'])
+            groups = [{"name" : group["subject"], "id" : group["_id"]} for group in groups]
+            destinations = [ {"name" : session["email"], "id" : session["email"]} ] + groups
             return render_template('deposit.html',
                                     title='Ingresos',
                                     destinations = destinations,
                                     name = "Name")#session["name"])
         elif(request.method =='POST'):
             if(request.form["destination"] == session["email"]):
+                url = "/lobby"
                 createIncome(request.form, userEmail=request.form["destination"])
             else:
+                url = "/lobbyGroup?groupId="+request.form["destination"]
                 createIncome(request.form, groupId=request.form["destination"])
-            return redirect("/lobby")
+            return redirect(url)
     else:
         return redirect("/accessdenied")
         
@@ -175,30 +201,88 @@ def accessDenied():
     return render_template('accessDenied.html',
         title='Acceso denegado')
 
-app.secret_key = os.urandom(24)
-print("Ma'h secrety key is",app.secret_key)
+
 
 
 @app.route('/expenseHist')
 def expenseHist():
     if('name' in session):
         category = request.args.get("category","",type=str)
-        expenses = readExpenses(category, session['email'])[::-1]
-        for expense in expenses:
-            expense['value'] = locale.currency(expense['value'], grouping = True)
+        if(not "groupId" in request.args.keys()):
+            expenses = readExpenses(category, session['email'])[::-1]
+            for expense in expenses:
+                expense['value'] = locale.currency(expense['value'], grouping = True)
+                                        
+        else:
+            groupId = request.args.get("groupId", "", type=str)
+            expenses = readExpenses(category,groupId=groupId)[::-1]
+            for expense in expenses:
+                expense['value'] = locale.currency(expense['value'], grouping = True)
+            
         return render_template('expenseHistory.html',
-                                expenses = expenses,
-                                title='Historial de gasto')                            
-
+                                    expenses = expenses,
+                                    title='Historial de gasto')
 
 @app.route('/incomeHist')
 def incomeHist():
     if('name' in session):
-        incomes = readIncomes(session['email'])[::-1]
-        for income in incomes:
-            income['value'] = locale.currency(income['value'], grouping = True)
+        if(not "groupId" in request.args.keys()):
+            incomes = readIncomes(session['email'])[::-1]
+            for income in incomes:
+                income['value'] = locale.currency(income['value'], grouping = True)
+                
+        else:
+            
+            groupId = request.args.get("groupId", "", type=str)
+            incomes = readIncomes(groupId=groupId)[::-1]
+            print(incomes)
+            for income in incomes:
+                income['value'] = locale.currency(income['value'], grouping = True)
+                
         return render_template('incomeHistory.html',
                                 incomes = incomes,
                                 title='Historial de ingresos')
     else:
         return redirect("/accessdenied")
+        
+@app.route('/createColabBudget', methods = ['GET', 'POST'])
+def colabBudget():
+    if('name' in session):
+        if(request.method == 'GET'):
+            return render_template('colabBudgetCreation.html', 
+                                   title='Crear presupuesto grupal'
+                                   )
+        elif(request.method == 'POST'):
+            if(validGroup(session['email'], request.form)):
+                createGroup(session['email'], request.form)
+                status = "El grupo "+request.form['subject']+" ha sido creado satisfactoriamente."
+            else:
+                status = "El grupo "+request.form['subject']+" ya existia. Por favor, selecciona un nombre distinto."
+            return render_template('colabResult.html',
+                                        status = status)
+    else:
+        return redirect("/accessdenied")
+                           
+@app.route('/lobbyGroup')
+def lobbyGroup():
+    if('name' in session):
+        groupId = request.args.get("groupId","",type=str)
+        group = readGroupById(groupId)
+        categories = getCategories(groupId = groupId)
+        for c in categories:
+            c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
+        group['budget'] = locale.currency(group['budget'], grouping = True)
+        group['incomesTotal'] = locale.currency(group['incomesTotal'], grouping = True)
+        group['expensesTotal'] = locale.currency(group['expensesTotal'], grouping = True)
+        print(categories)
+        return render_template('lobbyGroup.html',
+                                group = group,
+                                categories = categories,
+                                title='Lobby grupal')
+    else:
+        return redirect('/accessdenied')
+        
+        
+app.secret_key = os.urandom(24)
+app.secret_key = "debug"
+print("Ma'h secrety key is",app.secret_key)

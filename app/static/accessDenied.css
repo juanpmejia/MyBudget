@@ -1,7 +1,7 @@
 .fondo {
+  margin-bottom:5%;
   padding-top: 50;
   padding-bottom: 25;
-  margin: 70;
   background: repeating-linear-gradient(45deg, darkred ,  #111111 2px, #111111 3px, #111111 8px);
   -webkit-user-select: none;         
   -moz-user-select: none; 
@@ -16,7 +16,7 @@
 }
 .warning {
   padding-top: 30px;
-  font-size: 60px;
+  font-size: 6.0vh;
   font-family: Arial;
   text-align: center;
   border-bottom: 1px solid #333;
@@ -33,6 +33,7 @@ spam {
   font-family: Arial;
   font-weight: bold;
   padding-bottom: 3%;
+  font-size: 3.0vh;
 }
 small {
   font-family: Arial;
