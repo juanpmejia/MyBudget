@@ -530,6 +530,7 @@ class Database():
                             group = self.readGroupById(groupId)
                             oldBudget = group["budget"]
                             oldCosts = group["expensesTotal"]
+                            print("El oldBudget es",oldBudget)
                             self.updateCategory(categoryName, groupId = groupId, totalCost = oldTotalCost + value)
                             self.updateGroupById(groupId, budget = oldBudget - value, expensesTotal = oldCosts + value)
                             return self.expensesCollection.insert_one(expense)

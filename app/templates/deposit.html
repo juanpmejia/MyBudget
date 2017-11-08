@@ -26,7 +26,11 @@
                     <select class="form-control" name="destination" id="cat">
                         <option value="">Seleccione...</option>
                         {% for destination in destinations %}
+                        {% if defaultSelect == destination['id'] %}
+                        <option selected value="{{destination['id']}}">{{destination['name']}}</option>
+                        {% else %}
                         <option value="{{destination['id']}}">{{destination['name']}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                     

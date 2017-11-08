@@ -1,0 +1,15 @@
+<h1 style="color: #ff872b;
+    font-family: 'Helvetica Neue', 
+    sans-serif; 
+    font-weight: bold; letter-spacing: -1px; 
+    line-height: 1; text-align: center">¡Bienvenido a MyBudget©!</h1>
+<h2  style="color: #000000;
+    font-family: 'Helvetica Neue', 
+    sans-serif; 
+    font-weight: bold; letter-spacing: -1px; 
+    line-height: 1; text-align: center">Ya estas list@ para manejar tu dinero de una nueva manera.</h>
+<h1  style="color: #000000;
+    font-family: 'Helvetica Neue', 
+    sans-serif; 
+    font-weight: bold; letter-spacing: -1px; 
+    line-height: 1; text-align: center">¡Gracias por escogernos!</h1>

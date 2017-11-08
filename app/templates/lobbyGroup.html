@@ -22,7 +22,7 @@
                     <a data-fancybox data-type="iframe" href="/memberList?groupId={{group['_id']}}">Detalles de miembros del presupuesto</a>
                     <div>
                         <br>
-                        <a href="/deposit" class="btn btn-warning pull-left" id="createIncome">Depositar Ingreso</a><br><br>
+                        <a href="/deposit?groupId={{group['_id']}}" class="btn btn-warning pull-left" id="createIncome">Depositar Ingreso</a><br><br>
                     </div>
                     <hr>
                     <h3>Gastos totales por categoría</h3>
@@ -57,7 +57,7 @@
                 </div>
                 <div>
                     <br><br>
-                    <a href="/balance" class="btn btn-success pull-left" id="balance">Ver balance</a>
+                    <a href="/balance?groupId={{group['_id']}}" class="btn btn-success pull-left" id="balance">Ver balance</a>
                 </div>
             </div> 
         </div>

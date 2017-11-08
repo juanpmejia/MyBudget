@@ -28,6 +28,7 @@ def registro():
         print("Hay un post :D")
         if(validRegisterForm(request.form)):
             createUser(request.form)
+            sendRegistrationEmail(request.form)
             status = "Cuenta registrada exitosamente"
         else:
             status = "El email ya fue registrado, prueba con una cuenta de correo diferente"
@@ -87,12 +88,19 @@ def geUsers():
 @app.route('/balance')
 def balance():
     if('name' in session):
-        categories = getCategories(session['email'])
-        user = getUser(session['email'])
-        print(categories)
+        groupId = request.args.get("groupId","",type=str)
+        if(not groupId):
+            categories = getCategories(session['email'])
+            entity = getUser(session['email'])
+            entityType = "usuario"
+            print(categories)
+        else:
+            categories = getCategories(groupId = groupId)
+            entity = readGroupById(groupId)
+            entityType = "grupo "+entity['subject']
         return render_template('balance.html',
                                 categories = categories,
-                                user = user,
+                                entity = entity,
                                 title='Balance')
     else:
         return redirect("/accesdenied")
@@ -148,7 +156,10 @@ def crearCategoria():
                     createCategory(request.form, session['email'])
                 status = "Categoria agregada satisfactoriamente."
                 buttonText = "Volver al lobby"
-                link = "/lobby"
+                if(not groupId):
+                    link = "/lobby"
+                else:
+                    link = "/lobbyGroup?groupId="+groupId
             else:
                 status = "La categoría ya habia sido creada anteriormente. Escoge un nombre nuevo por favor."
                 buttonText = "Volver a Crear Categoría"
@@ -190,12 +201,19 @@ def lobby():
 def deposit():
     if "name" in session:
         if(request.method =='GET'):
+            groupId = request.args.get("groupId", "", type=str)
+            if(groupId):
+                defaultSelect = groupId
+            else:
+                defaultSelect = session['email']
             groups = readGroups(session['email'])
-            groups = [{"name" : group["subject"], "id" : group["_id"]} for group in groups]
+            groups = [{"name" : group["subject"], "id" : str(group["_id"])} for group in groups]
             destinations = [ {"name" : session["email"], "id" : session["email"]} ] + groups
+            print(defaultSelect)
             return render_template('deposit.html',
                                     title='Ingresos',
                                     destinations = destinations,
+                                    defaultSelect = defaultSelect,
                                     name = "Name")#session["name"])
         elif(request.method =='POST'):
             if(request.form["destination"] == session["email"]):

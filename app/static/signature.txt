@@ -1,0 +1,7 @@
+<img src="https://image.ibb.co/ms9QiG/logo.png" style="width: 90px;
+        height:90px;margin-top:20px; margin-left:20px">
+        <h4 style="color: #302f2f;
+        font-family: 'Helvetica Neue', 
+        sans-serif; 
+        font-weight: bold; letter-spacing: -1px; 
+        line-height: 1; font-size:12px; margin-left:15.5px; margin-top:-0.5;">Un producto de Arpasoft<br>Equipo de MyBudget </h4>

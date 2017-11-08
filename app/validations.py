@@ -4,7 +4,8 @@ This module makes data validations from client to server and back
 import hashlib
 import datetime
 from .database import Database
-
+from .files import *
+from .email import *
 def validRegisterForm(form):
     """
     Checks if the given form is valid for user registration
@@ -70,7 +71,23 @@ def createUser(form):
     }
     
     db.createUser(**userData)
-
+    
+    
+def sendRegistrationEmail(form):
+    user = getUser(form["InputEmail"])
+    to = user['email']
+    sender = "mybudgetstaff@gmail.com"
+    subject = "¡Registro exitoso!"
+    message_text_html = getMessage()
+    signature = getSignature()
+    companyName = "MyBudget©"
+    index = message_text_html.find(companyName)+len(companyName)
+    message_text_html = message_text_html[:index]+" "+user['name']+message_text_html[index:]
+    message_text_html = message_text_html + signature
+    message_text_plain = "PAPAIAAA"
+    attached_file = r'C:\Users\Me\Desktop\audio.m4a'
+    create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
+    
 def getUser(email):
     return Database().readUserByEmail(email)
 

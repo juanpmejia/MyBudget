@@ -7,15 +7,16 @@ window.onload = function () {
 		title:{
 			text: "Balance Gastos Semanales"
 		},
+		backgroundColor:  "rgba(255, 0, 0, 0)",
 		data: [
 		{
-			type: "bar",
-			name: "Categorías",
-			color: "#014D65",
+			type: "pie",
+			legendText: "{indexLabel}",
+			toolTipContent: "{y} - #percent %",
 			showInLegend: true,
 			dataPoints: [
 			{% for category in categories%}
-				{ y: {{category['totalCost']}} , label: "{{category['name']}}"},
+				{ y: {{category['totalCost']}} , indexLabel: "{{category['name']}}"},
 			{% endfor %}
 			]
 		},
@@ -34,9 +35,9 @@ var chart2 = new CanvasJS.Chart("chartContainer2",
 			name: "Categorías",
 			showInLegend: false,
 			dataPoints: [
-				{ y: {{user['incomesTotal']}} , label: "Total de ingresos"},
-				{ y: {{user['expensesTotal']}} , label: "Total de gastos"},
-				{ y: {{user['budget']}} , label: "Presupuesto"},
+				{ y: {{entity['incomesTotal']}} , label: "Total de ingresos"},
+				{ y: {{entity['expensesTotal']}} , label: "Total de gastos"},
+				{ y: {{entity['budget']}} , label: "Presupuesto"},
 			
 			]
 		},
@@ -47,6 +48,9 @@ var chart2 = new CanvasJS.Chart("chartContainer2",
 </script>
 
 <div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+<br>
+<hr>
+<br>
 <div id="chartContainer2" style="height: 300px; width: 100%;"></div>
 
 
