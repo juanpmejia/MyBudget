@@ -1,7 +1,5 @@
-import os
-
 WTF_CSRF_ENABLED = True
-SECRET_KEY = os.urandom(24)
+SECRET_KEY = "\x1c<d\xa4\xaev\x93\x93\x060~\x15 \x9f\xaf\x1bo\x87\x17\xb6\\*\xafy"
 TEMPLATES_AUTO_RELOAD = True
 OPENID_PROVIDERS = [
     {'name': 'Google', 'url': 'https://www.google.com/accounts/o8/id'},
