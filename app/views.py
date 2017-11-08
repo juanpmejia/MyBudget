@@ -25,7 +25,7 @@ def index():
 def registro():
     if(request.method == 'POST'):
         error = None
-        print("Hay un post :D")
+        print("Hay un post:D")
         if(validRegisterForm(request.form)):
             createUser(request.form)
             sendRegistrationEmail(request.form)
