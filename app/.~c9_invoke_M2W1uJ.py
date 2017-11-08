@@ -7,7 +7,7 @@ from bson.json_util import dumps
 from .validations import *
 
 
-locale.setlocale(locale.LC_ALL, 'en_US.utf8')
+locale.setlocale(locale.LC_ALL, 'en_CO.utf8')
 
 
 
@@ -28,7 +28,7 @@ def registro():
         print("Hay un post :D")
         if(validRegisterForm(request.form)):
             createUser(request.form)
-            sendRegistrationEmail(request.form)
+            sendRegistrationEmao
             status = "Cuenta registrada exitosamente"
         else:
             status = "El email ya fue registrado, prueba con una cuenta de correo diferente"

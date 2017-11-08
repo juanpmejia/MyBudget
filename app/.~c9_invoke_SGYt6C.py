@@ -7,7 +7,7 @@ from bson.json_util import dumps
 from .validations import *
 
 
-locale.setlocale(locale.LC_ALL, 'en_US.utf8')
+locale.setlocale(locale.LC_ALL, 'en_CO.utf8')
 
 
 
