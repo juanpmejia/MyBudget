@@ -334,8 +334,8 @@ def memberList():
     else:
         return redirect("/accessdenied")
 
-print(app.secret_key, "llave secreta")
-if(app.secret_key == "key"):       
-    app.secret_key = os.urandom(24)
-    #app.secret_key  = "debug"
-    print("Ma'h secrety key is",app.secret_key)
+# print(app.secret_key, "llave secreta")
+# if(app.secret_key == "key"):       
+#     app.secret_key = os.urandom(24)
+# app.secret_key  = "debug"
+print("Ma'h secrety key is",app.secret_key)
