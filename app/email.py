@@ -258,7 +258,5 @@ def main():
         create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
 
 
-
-
 if __name__ == '__main__':
         main()
