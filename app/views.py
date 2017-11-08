@@ -93,14 +93,17 @@ def balance():
             categories = getCategories(session['email'])
             entity = getUser(session['email'])
             entityType = "usuario"
+            goBackLink = "/lobby"
             print(categories)
         else:
             categories = getCategories(groupId = groupId)
             entity = readGroupById(groupId)
             entityType = "grupo "+entity['subject']
+            goBackLink = "/lobbyGroup?groupId="+groupId
         return render_template('balance.html',
                                 categories = categories,
                                 entity = entity,
+                                goBackLink = goBackLink,
                                 title='Balance')
     else:
         return redirect("/accesdenied")
