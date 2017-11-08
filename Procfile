@@ -1,1 +1,1 @@
-web: gunicorn run:app(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)),debug=True --log-file=-
+web: gunicorn run:app(debug=True) --log-file=-
