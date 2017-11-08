@@ -33,7 +33,6 @@ scipy==0.13.3
 simplegeneric==0.8.1
 six==1.11.0
 tornado==3.1.1
-unattended-upgrades
 uritemplate==3.0.0
 urllib3==1.7.1
 wheel==0.24.0
