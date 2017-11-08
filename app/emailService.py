@@ -21,6 +21,12 @@ from email.mime.application import MIMEApplication
 from apiclient import errors, discovery  #needed for gmail service
 
 
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
 
 ## About credentials
 # There are 2 types of "credentials": 
