@@ -69,5 +69,6 @@ if __name__ == "__main__":
     
 
 def create_message_and_send(subject, to, message_text_html,  sender):
-    print(subject, to, message_text_html, sender)
-    py_mail(subject,to,message_text_html,sender)
+    print(subject, message_text_html, to,sender)
+    py_mail(subject,message_text_html, to,sender)
+
