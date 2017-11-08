@@ -55,7 +55,7 @@ def get_credentials():
     credentials = store.get()
 
     if not credentials or credentials.invalid:
-        CLIENT_SECRET_FILE = 'app/static/client_secret.json'
+        CLIENT_SECRET_FILE = 'app/client_secret.json'
         APPLICATION_NAME = 'Gmail API Python Send Email'
         #The scope URL for read/write access to a user's calendar data  
 
