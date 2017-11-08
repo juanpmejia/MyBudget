@@ -336,5 +336,5 @@ def memberList():
 
         
 app.secret_key = os.urandom(24)
-app.secret_key = "debug"
+#app.secret_key = "debug"
 print("Ma'h secrety key is",app.secret_key)
