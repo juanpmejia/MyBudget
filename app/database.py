@@ -45,11 +45,11 @@ class Database():
         self.expensesCollection = self.db.expenses_collection
         self.groupsCollection = self.db.groups_collection
         self.groupsUsersCollection = self.db.groups_users_collection
-        if(initializeDatabase):
+        if(initializeDatabase, empty):
             self.client.drop_database("MyBudget")    
-            self.initializeDatabase()
+            self.initializeDatabase(empty)
     
-    def initializeDatabase(self):
+    def initializeDatabase(self, empty):
         #Database initialization
         self.usersCollection.create_index("email", unique = True);
         self.categoriesCollection.create_index([("userEmail", ASCENDING), ("name", DESCENDING)], unique = True)
