@@ -36,7 +36,7 @@ class Database():
     #Static client
     #aguacate-2017 is the password and mybudget the user
     client = MongoClient("mongodb://mybudget:aguacate-2017@cluster0-shard-00-00-qo8mp.mongodb.net:27017,cluster0-shard-00-01-qo8mp.mongodb.net:27017,cluster0-shard-00-02-qo8mp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin")
-    def __init__(self,initializeDatabase=False):
+    def __init__(self,initializeDatabase=False,empty = False):
         #Class initialization
         self.db = self.client.MyBudget
         self.usersCollection = self.db.users_collection
@@ -63,8 +63,9 @@ class Database():
         
         defaultUser = self.defData.copy()
         defaultCategory = self.defCat.copy()
-        self.usersCollection.insert_one(defaultUser)
-        self.categoriesCollection.insert_one(defaultCategory)
+        if(not empty):
+            self.usersCollection.insert_one(defaultUser)
+            self.categoriesCollection.insert_one(defaultCategory)
     
     #CRUD Functions for the user
     
