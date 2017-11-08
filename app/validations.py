@@ -5,7 +5,7 @@ import hashlib
 import datetime
 from .database import Database
 from .files import *
-from .email import *
+from .emailService import *
 def validRegisterForm(form):
     """
     Checks if the given form is valid for user registration
