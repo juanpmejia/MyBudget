@@ -46,10 +46,10 @@ def get_credentials():
     # If needed create folder for credential
     home_dir = os.path.expanduser('~') #>> C:\Users\Me
     credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\Me\.credentials   (it's a folder)
-    if True:#not os.path.exists(credential_dir):
+    if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)  #create folder if doesnt exist
     credential_path = os.path.join(credential_dir, 'cred send mail.json')
-
+    print("pase de aqui hpta")
     #Store the credential
     store = oauth2client.file.Storage(credential_path)
     credentials = store.get()
