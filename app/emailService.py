@@ -21,11 +21,6 @@ from email.mime.application import MIMEApplication
 from apiclient import errors, discovery  #needed for gmail service
 
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
 
 
 ## About credentials
@@ -49,30 +44,37 @@ except ImportError:
             # you will need the CLIENT_ID each time to create a new credential that contains the new scope.
             # Set a new credentials_path for the new credential (because it's another file)
 def get_credentials():
-    # If needed create folder for credential
-    home_dir = os.path.expanduser('~') #>> C:\Users\Me
-    credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\Me\.credentials   (it's a folder)
+    
+    
+    SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
+    CLIENT_SECRET_FILE = 'client_secret.json'
+    APPLICATION_NAME = 'Gmail API Python Quickstart'
+    
+    """Gets valid user credentials from storage.
+
+    If nothing has been stored, or if the stored credentials are invalid,
+    the OAuth2 flow is completed to obtain the new credentials.
+
+    Returns:
+        Credentials, the obtained credential.
+    """
+    home_dir = os.path.expanduser('~')
+    credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
-        os.makedirs(credential_dir)  #create folder if doesnt exist
-    credential_path = os.path.join(credential_dir, 'cred send mail.json')
-    print("pase de aqui hpta")
-    #Store the credential
-    store = oauth2client.file.Storage(credential_path)
+        os.makedirs(credential_dir)
+    credential_path = os.path.join(credential_dir,
+                                   'gmail-python-quickstart.json')
+
+    store = Storage(credential_path)
     credentials = store.get()
-
     if not credentials or credentials.invalid:
-        CLIENT_SECRET_FILE = 'app/client_secret.json'
-        APPLICATION_NAME = 'Gmail API Python Send Email'
-        #The scope URL for read/write access to a user's calendar data  
-
-        SCOPES = 'https://www.googleapis.com/auth/gmail.send'
-
-        # Create a flow object. (it assists with OAuth 2.0 steps to get user authorization + credentials)
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
-
-        credentials = tools.run_flow(flow, store)
-
+        if flags:
+            credentials = tools.run_flow(flow, store, flags)
+        else: # Needed only for compatibility with Python 2.6
+            credentials = tools.run(flow, store)
+        print('Storing credentials to ' + credential_path)
     return credentials
 
 
