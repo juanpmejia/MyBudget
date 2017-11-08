@@ -86,7 +86,7 @@ def sendRegistrationEmail(form):
     message_text_html = message_text_html + signature
     message_text_plain = "PAPAIAAA"
     attached_file = r'C:\Users\Me\Desktop\audio.m4a'
-    create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
+    create_message_and_send(subject, to, message_text_html,  sender)
     
 def getUser(email):
     return Database().readUserByEmail(email)
