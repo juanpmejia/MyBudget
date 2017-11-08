@@ -45,7 +45,7 @@ class Database():
         self.expensesCollection = self.db.expenses_collection
         self.groupsCollection = self.db.groups_collection
         self.groupsUsersCollection = self.db.groups_users_collection
-        if(initializeDatabase, empty):
+        if(initializeDatabase):
             self.client.drop_database("MyBudget")    
             self.initializeDatabase(empty)
     

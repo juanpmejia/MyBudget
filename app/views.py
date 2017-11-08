@@ -186,6 +186,8 @@ def lobby():
         for c in categories:
             c["totalCost"] = locale.currency(c["totalCost"], grouping = True)
         user = getUser(session['email'])
+        if(not user):
+            return redirect("/logout")
         groups = readGroups(session['email'])
         return render_template('lobbyUsuario.html',
                                 title='Tu lobby',
