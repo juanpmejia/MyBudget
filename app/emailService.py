@@ -55,7 +55,7 @@ def get_credentials():
     credentials = store.get()
 
     if not credentials or credentials.invalid:
-        CLIENT_SECRET_FILE = 'app/client_secret.json'
+        CLIENT_SECRET_FILE = 'client_secret.json'
         APPLICATION_NAME = 'Gmail API Python Send Email'
         #The scope URL for read/write access to a user's calendar data  
 
@@ -113,10 +113,8 @@ def create_message_without_attachment (sender, to, subject, message_text_html, m
 
 def create_Message_with_attachment(sender, to, subject, message_text_plain, message_text_html, attached_file):
     """Create a message for an email.
-
     message_text: The text of the email message.
     attached_file: The path to the file to be attached.
-
     Returns:
     An object containing a base64url encoded email object.
     """
@@ -228,12 +226,10 @@ def send_Message_without_attachement(service, user_id, body, message_text_plain)
 
 def send_Message_with_attachement(service, user_id, message_with_attachment, message_text_plain, attached_file):
     """Send an email message.
-
     Args:
     service: Authorized Gmail API service instance.
     user_id: User's email address. The special value "me" can be used to indicate the authenticated user.
     message: Message to be sent.
-
     Returns:
     Sent Message.
     """
